@@ -1,0 +1,12 @@
+
+scribbles_/pubspec.yaml
+
+*.cc
+
+*.h
+
+*.cmake
+
+scribbles_/pubspec.lock
+
+scribbles_/macos/Flutter/GeneratedPluginRegistrant.swift
