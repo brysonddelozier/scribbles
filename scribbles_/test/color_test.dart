@@ -15,8 +15,6 @@ void main() {
   test("Test colors from palette", () {
     ColorPalette palette = ColorPalette(key: "lukespeer");
 
-    palette.colors.forEach((value) {
-      print(value);
-    });
+    for (int i = 0; i < 8; i++) assert(palette.colors[i].a == 1);
   });
 }
