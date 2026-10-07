@@ -1,9 +1,10 @@
 class Canvas {
+  final String userHash;
   final List<int> drawing;
   final int width;
   final int height;
 
-  Canvas({required this.width, required this.height})
+  Canvas({required this.userHash, required this.width, required this.height})
     : drawing = List<int>.filled(width * height, 0);
 
   int getPixel(int x, int y) {
