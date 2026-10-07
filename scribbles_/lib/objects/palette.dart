@@ -21,7 +21,7 @@ List<Color> getHashColors(String key) {
     int value =
         (255 << 24) |
         (digest.bytes[i + 2] << 16) |
-        (digest.bytes[i + 1]) |
+        (digest.bytes[i + 1] << 8) |
         (digest.bytes[i]);
 
     colors[i] = Color(value);
