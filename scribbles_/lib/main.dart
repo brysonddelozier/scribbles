@@ -14,9 +14,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'Scribbles',
-      routerConfig: _router, // new
+    return ChangeNotifierProvider(
+      create: (_) => ApplicationState(),
+      child: MaterialApp.router(
+        title: 'Scribbles',
+        theme: ThemeData(
+        buttonTheme: Theme.of(context).buttonTheme
+            .copyWith(highlightColor: Colors.pinkAccent),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.pink),
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+        routerConfig: _router, // new
+      ),
     );
   }
 }
