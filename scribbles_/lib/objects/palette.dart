@@ -17,7 +17,10 @@ List<Color> getHashColors(String key) {
   var bytes = utf8.encode(key);
   var digest = sha256.convert(bytes);
 
-  for (int i = 0; i < 8; i++) {
+  colors[0] = Colors.white;
+  colors[1] = Colors.black;
+
+  for (int i = 2; i < 8; i++) {
     int value =
         (255 << 24) |
         (digest.bytes[i + 2] << 16) |
