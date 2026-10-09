@@ -39,10 +39,6 @@ class ScribbleLayer {
     return (y * width) + x;
   }
 
-  void setPixel(int x, int y) {
-    drawing[y * width + x];
-  }
-
   Map toMap() {
     return {'width': width, 'height': height, 'drawing': drawing};
   }
