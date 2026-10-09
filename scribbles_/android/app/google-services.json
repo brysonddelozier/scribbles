@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "448603547585",
+    "project_id": "scribbles-25225",
+    "storage_bucket": "scribbles-25225.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:448603547585:android:9ebcff9766c2ac94c4b140",
+        "android_client_info": {
+          "package_name": "com.example.scribbles"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "448603547585-u1e0edd96vuv4ctf67694ikq7q0scnut.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXx0_PMkNfXrpkGM_RREHy31PrGGSeoFo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "448603547585-u1e0edd96vuv4ctf67694ikq7q0scnut.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
