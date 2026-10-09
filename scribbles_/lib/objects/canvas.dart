@@ -45,7 +45,12 @@ class ScribbleLayer {
   }
 
   Map toMap() {
-    return {'width': width, 'height': height, 'drawing': drawing};
+    return {
+      'palette': palette.key,
+      'width': width,
+      'height': height,
+      'drawing': drawing,
+    };
   }
 }
 
@@ -136,27 +141,18 @@ class ScribbleCanvas {
   }
 
   Future<ui.Image> toImage() async {
-    //redraw();
+    // redraw(); // optional
     final w = width();
     final h = height();
 
-    var immutableBuffer = await ui.ImmutableBuffer.fromUint8List(cache.colors);
-    var imageDescriptor = ui.ImageDescriptor.raw(
-      immutableBuffer,
-      width: w,
-      height: h,
-      pixelFormat: ui.PixelFormat.rgba8888,
-    );
-    var codec = await imageDescriptor.instantiateCodec(
-      targetWidth: w,
-      targetHeight: h,
-    );
+    final completer = Completer<ui.Image>();
 
-    var frameInfo = await codec.getNextFrame();
-    codec.dispose();
-    immutableBuffer.dispose();
-    imageDescriptor.dispose();
+    ui.decodeImageFromPixels(cache.colors, w, h, ui.PixelFormat.rgba8888, (
+      ui.Image image,
+    ) {
+      completer.complete(image);
+    });
 
-    return frameInfo.image;
+    return completer.future;
   }
 }

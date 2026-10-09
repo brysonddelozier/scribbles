@@ -9,6 +9,10 @@ class ColorPalette {
   final List<Color> colors;
 
   ColorPalette({required this.key}) : colors = getHashColors(key);
+
+  Map toMap() {
+    return {'key': key};
+  }
 }
 
 List<Color> getHashColors(String key) {
