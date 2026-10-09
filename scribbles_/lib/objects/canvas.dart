@@ -1,5 +1,10 @@
+import 'dart:async';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:scribbles/objects/palette.dart';
+
+import 'dart:ui' as ui;
 
 class ScribbleLayer {
   final ColorPalette palette;
@@ -32,7 +37,7 @@ class ScribbleLayer {
     int mask = 0xF << shift;
 
     drawing[posIndex] =
-        (drawing[index] & ~mask) | ((colorIndex & 0xF) << shift);
+        (drawing[posIndex] & ~mask) | ((colorIndex & 0xF) << shift);
   }
 
   int index(int x, int y) {
@@ -47,17 +52,27 @@ class ScribbleLayer {
 class MergedLayer {
   final int width;
   final int height;
-  final List<Color> colors;
+  final Uint8List colors;
 
   MergedLayer({required this.width, required this.height})
-    : colors = List.filled(width * height, Colors.white);
+    : colors = Uint8List(width * height * 4);
 
   void setPixel(int x, int y, Color color) {
-    colors[(y * width) + x];
+    int pos = ((y * width) + x) * 4;
+    colors[pos] = color.red;
+    colors[pos + 1] = color.green;
+    colors[pos + 2] = color.blue;
+    colors[pos + 3] = color.alpha;
   }
 
   Color getPixel(int x, int y) {
-    return colors[(y * width) + x];
+    int pos = (y * width) + x;
+    return Color.fromARGB(
+      colors[pos + 3],
+      colors[pos],
+      colors[pos + 1],
+      colors[pos + 2],
+    );
   }
 }
 
@@ -106,9 +121,42 @@ class ScribbleCanvas {
 
   void redraw() {
     for (int x = 0; x < layer.width; x++) {
-      for (int y = 0; y < layer.width; y++) {
+      for (int y = 0; y < layer.height; y++) {
         cache.setPixel(x, y, getColor(x, y));
       }
     }
+  }
+
+  int width() {
+    return cache.width;
+  }
+
+  int height() {
+    return cache.height;
+  }
+
+  Future<ui.Image> toImage() async {
+    //redraw();
+    final w = width();
+    final h = height();
+
+    var immutableBuffer = await ui.ImmutableBuffer.fromUint8List(cache.colors);
+    var imageDescriptor = ui.ImageDescriptor.raw(
+      immutableBuffer,
+      width: w,
+      height: h,
+      pixelFormat: ui.PixelFormat.rgba8888,
+    );
+    var codec = await imageDescriptor.instantiateCodec(
+      targetWidth: w,
+      targetHeight: h,
+    );
+
+    var frameInfo = await codec.getNextFrame();
+    codec.dispose();
+    immutableBuffer.dispose();
+    imageDescriptor.dispose();
+
+    return frameInfo.image;
   }
 }
