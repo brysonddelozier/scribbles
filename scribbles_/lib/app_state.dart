@@ -133,6 +133,15 @@ class ApplicationState extends ChangeNotifier {
       } ]
     }, SetOptions(merge: true));
   }
+  void writeProfile(String id, String username, String pfp){
+    final profileDoc = FirebaseFirestore.instance
+    .collection('profiles')
+    .doc(id);
+    profileDoc.set({
+      'Username': username,
+      'pfp': pfp,
+    }, SetOptions(merge: true));
+  }
 
   void clearError() {
     _errorMessage = null;
