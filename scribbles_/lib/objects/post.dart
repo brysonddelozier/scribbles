@@ -5,7 +5,8 @@ class Post{
   String parentID;
   int timeStamp;
   ScribbleCanvas canvas;
+  String user;
 
 
-  Post({required this.id, required this.parentID, required this.timeStamp, required this.canvas});
+  Post({required this.id, required this.parentID, required this.timeStamp, required this.canvas, required this.user});
 }

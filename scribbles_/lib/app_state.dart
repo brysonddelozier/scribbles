@@ -97,6 +97,7 @@ class ApplicationState extends ChangeNotifier {
                       ],
                       palette: ColorPalette(key: data['user']),
                     ),
+                    user: data['user']
                   );
                   tempData[document.id] = tempPost;
                 }
@@ -112,6 +113,25 @@ class ApplicationState extends ChangeNotifier {
     } catch (error, stackTrace) {
       _reportError('Firebase initialization', error, stackTrace);
     }
+  }
+
+  void writePost(Post post){
+    final postDoc = FirebaseFirestore.instance
+    .collection('posts')
+    .doc(post.id);
+    postDoc.set({
+      'user': post.user,
+      'timeStamp': post.timeStamp,
+      'parentID': post.parentID,
+      'layers': [for (ScribbleLayer layer in post.canvas.layers){
+        {
+          'drawing': layer.drawing,
+          'height': layer.height,
+          'palette': layer.palette.key,
+          'width': layer.width,
+        }
+      } ]
+    }, SetOptions(merge: true));
   }
 
   void clearError() {
