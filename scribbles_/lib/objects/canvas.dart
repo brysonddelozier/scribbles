@@ -12,6 +12,12 @@ class ScribbleLayer {
     required this.width,
     required this.height,
   }) : drawing = List<int>.filled((width * height + 7) ~/ 8, 0);
+  ScribbleLayer.withDrawing({
+    required this.palette,
+    required this.width,
+    required this.height,
+    required this.drawing,
+  });
 
   Color getPixel(int x, int y) {
     int index = this.index(x, y);
