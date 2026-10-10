@@ -114,7 +114,7 @@ class ApplicationState extends ChangeNotifier {
       _reportError('Firebase initialization', error, stackTrace);
     }
   }
-
+  // when a post is posted, call this method after setting up the Post object
   void writePost(Post post){
     final postDoc = FirebaseFirestore.instance
     .collection('posts')
@@ -133,10 +133,14 @@ class ApplicationState extends ChangeNotifier {
       } ]
     }, SetOptions(merge: true));
   }
-  void writeProfile(String id, String username, String pfp){
+
+  // id should be that of the current user, immutable
+  // username can be changed freely
+  // pfp is the ID of the post displayed as a profile picture (not sure if we will implement this in time)
+  void writeProfile(String username, String pfp){
     final profileDoc = FirebaseFirestore.instance
     .collection('profiles')
-    .doc(id);
+    .doc(FirebaseAuth.instance.currentUser!.uid);
     profileDoc.set({
       'Username': username,
       'pfp': pfp,
