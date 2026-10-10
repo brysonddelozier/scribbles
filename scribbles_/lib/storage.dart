@@ -20,8 +20,8 @@ class Storage {
 }
 
 class DataHolder{
-  final Map<String, Map<String, Object>> profiles;
-  final Map<String, Post> posts;
+  Map<String, Map<String, Object>> profiles;
+  Map<String, Post> posts;
 
   DataHolder():profiles = Map(), posts = Map();
 }
