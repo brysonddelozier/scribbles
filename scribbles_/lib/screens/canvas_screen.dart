@@ -236,3 +236,42 @@ class _CanvasScreenState extends State<CanvasScreen> {
     _update();
   }
 }
+
+class CanvasWidget extends StatefulWidget {
+  final ScribbleCanvas canvas;
+
+  CanvasWidget({required this.canvas});
+
+  @override
+  State<StatefulWidget> createState() {
+    return _CanvasWidgetState();
+  }
+}
+
+class _CanvasWidgetState extends State<CanvasWidget> {
+  late Future<ui.Image> _image;
+
+  @override
+  void initState() {
+    super.initState();
+    _image = widget.canvas.toImage();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: _image,
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return const Center(child: Icon(Icons.error_outline_outlined));
+        }
+
+        if (snapshot.hasData) {
+          return Center(child: RawImage(image: snapshot.data!));
+        }
+
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
+  }
+}
