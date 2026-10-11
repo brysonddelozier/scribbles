@@ -4,7 +4,7 @@ import 'package:scribbles/objects/palette.dart';
 class PaletteWidget extends StatefulWidget {
   final ColorPalette palette;
 
-  PaletteWidget({required this.palette});
+  const PaletteWidget({required this.palette});
 
   @override
   State<StatefulWidget> createState() {
