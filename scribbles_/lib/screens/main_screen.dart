@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scribbles/screens/feed_screen.dart';
-import 'package:scribbles/screens/messages_screen.dart';
+import 'package:scribbles/screens/settings_screen.dart';
 import 'package:scribbles/screens/profile_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -15,7 +15,7 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> screens = [
     const FeedScreen(),
     const ProfileScreen(),
-    const MessagesScreen(),
+    const SettingsScreen(),
   ];
 
   int currentScreen = 0;
@@ -46,9 +46,9 @@ class _MainScreenState extends State<MainScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.message,
+              Icons.settings,
             ),
-            label: "Messages",
+            label: "Settings",
           ),
         ],
       ),
