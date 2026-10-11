@@ -9,6 +9,8 @@ import 'dart:math' as math;
 
 import 'dart:ui' as ui;
 
+import 'package:scribbles/widgets/palette_widget.dart';
+
 // https://github.com/serverpod/pixels/blob/main/lib/src/pixel_image.dart
 
 class CanvasScreen extends StatefulWidget {
@@ -82,29 +84,55 @@ class _CanvasScreenState extends State<CanvasScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final double widgetWidth = constraints.maxWidth;
-        final double widgetHeight = constraints.maxHeight;
+    return Scaffold(
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(25),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AspectRatio(
+                aspectRatio: 1,
+                child: Container(
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      final double widgetWidth = constraints.maxWidth;
+                      final double widgetHeight = constraints.maxHeight;
 
-        return GestureDetector(
-          child: Center(
-            child: AspectRatio(
-              aspectRatio: 1,
-              child: _uiImage == null ? null : RawImage(image: _uiImage),
-            ),
+                      return GestureDetector(
+                        child: Center(
+                          child: AspectRatio(
+                            aspectRatio: 1,
+                            child: _uiImage == null
+                                ? null
+                                : RawImage(image: _uiImage),
+                          ),
+                        ),
+                        onPanUpdate: (details) => _continueDrawing(
+                          details.localPosition,
+                          widgetWidth,
+                          widgetHeight,
+                        ),
+                        onPanStart: (details) => _startDrawing(
+                          details.localPosition,
+                          widgetWidth,
+                          widgetHeight,
+                        ),
+                        onPanEnd: (details) => _endDrawing(
+                          details.localPosition,
+                          widgetWidth,
+                          widgetHeight,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+              PaletteWidget(palette: widget.palette),
+            ],
           ),
-          onPanUpdate: (details) => _continueDrawing(
-            details.localPosition,
-            widgetWidth,
-            widgetHeight,
-          ),
-          onPanStart: (details) =>
-              _startDrawing(details.localPosition, widgetWidth, widgetHeight),
-          onPanEnd: (details) =>
-              _endDrawing(details.localPosition, widgetWidth, widgetHeight),
-        );
-      },
+        ),
+      ),
     );
   }
 
