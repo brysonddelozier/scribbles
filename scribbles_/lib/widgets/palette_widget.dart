@@ -3,8 +3,9 @@ import 'package:scribbles/objects/palette.dart';
 
 class PaletteWidget extends StatefulWidget {
   final ColorPalette palette;
+  final ValueChanged<int> callback;
 
-  const PaletteWidget({required this.palette});
+  const PaletteWidget({required this.palette, required this.callback});
 
   @override
   State<StatefulWidget> createState() {
@@ -25,17 +26,19 @@ class _PaletteWidgetState extends State<PaletteWidget> {
         padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 8.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: widget.palette.colors.map((color) {
+          children: widget.palette.colors.asMap().entries.map((color) {
             return InkWell(
-              onTap: _onTap,
+              onTap: () {
+                _onTap(color.key);
+              },
               borderRadius: BorderRadius.circular(20),
               child: Container(
                 width: 36,
                 height: 36,
                 decoration: BoxDecoration(
-                  color: color,
+                  color: color.value,
                   shape: BoxShape.circle,
-                  border: Border.all(color: color, width: 3),
+                  border: Border.all(color: color.value, width: 3),
                 ),
               ),
             );
@@ -45,5 +48,7 @@ class _PaletteWidgetState extends State<PaletteWidget> {
     );
   }
 
-  void _onTap() {}
+  void _onTap(int value) {
+    widget.callback(value);
+  }
 }

@@ -128,12 +128,16 @@ class _CanvasScreenState extends State<CanvasScreen> {
                   ),
                 ),
               ),
-              PaletteWidget(palette: widget.palette),
+              PaletteWidget(palette: widget.palette, callback: _changeColor),
             ],
           ),
         ),
       ),
     );
+  }
+
+  void _changeColor(int value) {
+    selectedColor = value;
   }
 
   void _invalidate() {
