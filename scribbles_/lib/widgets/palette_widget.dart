@@ -20,23 +20,12 @@ class _PaletteWidgetState extends State<PaletteWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Color> paletteColors = [
-      Colors.red,
-      Colors.orange,
-      Colors.yellow,
-      Colors.green,
-      Colors.blue,
-      Colors.purple,
-      Colors.brown,
-      Colors.black,
-    ];
-
     return Card(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 8.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: paletteColors.map((currentColor) {
+          children: widget.palette.colors.map((color) {
             return InkWell(
               onTap: _onTap,
               borderRadius: BorderRadius.circular(20),
@@ -44,9 +33,9 @@ class _PaletteWidgetState extends State<PaletteWidget> {
                 width: 36,
                 height: 36,
                 decoration: BoxDecoration(
-                  color: currentColor,
+                  color: color,
                   shape: BoxShape.circle,
-                  border: Border.all(color: currentColor, width: 3),
+                  border: Border.all(color: color, width: 3),
                 ),
               ),
             );
