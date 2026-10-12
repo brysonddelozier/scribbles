@@ -58,3 +58,45 @@ class PrivacyScreen extends StatelessWidget {
     );
   }
 }
+
+class DividerExampleApp extends StatelessWidget {
+  const DividerExampleApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: const Text('Divider Example')),
+        body: ListView(
+          children: const [
+            ListTile(title: Text('Item 1')),
+            Divider(),
+            ListTile(title: Text('Item 2')),
+            Divider(),
+            ListTile(title: Text('Item 3')),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class DividerExample extends StatelessWidget {
+  const DividerExample({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Padding(
+        padding: .all(16.0),
+        child: Column(
+          children: <Widget>[
+            Expanded(child: Card(child: SizedBox.expand())),
+            Divider(),
+            Expanded(child: Card(child: SizedBox.expand())),
+          ],
+        ),
+      ),
+    );
+  }
+}
