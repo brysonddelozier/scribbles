@@ -45,7 +45,7 @@ class _CanvasScreenState extends State<CanvasScreen> {
     height = widget.canvas.height();
 
     super.initState();
-    _update();
+    _update(true);
   }
 
   Offset toCanvasPosition(
@@ -70,9 +70,11 @@ class _CanvasScreenState extends State<CanvasScreen> {
         position.dy < height;
   }
 
-  Future<void> _update() async {
+  Future<void> _update(bool redraw) async {
     if (rendering) return;
     rendering = true;
+
+    if (redraw) widget.canvas.redraw();
 
     Future.microtask(() async {
       _uiImage = await widget.canvas.toImage();
@@ -93,7 +95,8 @@ class _CanvasScreenState extends State<CanvasScreen> {
             children: [
               AspectRatio(
                 aspectRatio: 1,
-                child: Container(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(5),
                   child: LayoutBuilder(
                     builder: (context, constraints) {
                       final double widgetWidth = constraints.maxWidth;
@@ -128,12 +131,27 @@ class _CanvasScreenState extends State<CanvasScreen> {
                   ),
                 ),
               ),
-              PaletteWidget(palette: widget.palette, callback: _changeColor),
+              PaletteWidget(
+                selectedColor,
+                palette: widget.palette,
+                callback: _changeColor,
+              ),
+              Slider(
+                value: radius.toDouble(),
+                onChanged: _changeBrushSize,
+                min: 5,
+                max: 30,
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  void _changeBrushSize(double value) {
+    radius = value.toInt();
+    setState(() {});
   }
 
   void _changeColor(int value) {
@@ -160,7 +178,7 @@ class _CanvasScreenState extends State<CanvasScreen> {
     _lastX = point.dx.toInt();
     _lastY = point.dy.toInt();
 
-    drawPixelCircle(_lastX!, _lastY!);
+    drawPixelCircle(_lastX!, _lastY!, true);
   }
 
   void _continueDrawing(Offset position, double width, double height) {
@@ -176,11 +194,12 @@ class _CanvasScreenState extends State<CanvasScreen> {
     if (_lastX == null || _lastY == null) {
       _lastX = x;
       _lastY = y;
-      drawPixelCircle(x, y);
+      drawPixelCircle(x, y, true);
       return;
     }
 
     _drawLine(_lastX!, _lastY!, x, y);
+    _update(true);
 
     _lastX = x;
     _lastY = y;
@@ -194,10 +213,20 @@ class _CanvasScreenState extends State<CanvasScreen> {
     int sx = x0 < x1 ? 1 : -1;
     int sy = y0 < y1 ? 1 : -1;
 
+    int prevX = 0, prevY = 0;
+
     int error = dx - dy;
 
+    // try saving performance by using a dist alg to find dist since last draw.
+    int spacing = ((radius / 5) * (radius / 5)).toInt();
+
     while (true) {
-      drawPixelCircle(x0, y0);
+      if ((x0 - prevX) * (x0 - prevX) + (y0 - prevY) * (y0 - prevY) >=
+          spacing) {
+        prevX = x0;
+        prevY = y0;
+        drawPixelCircle(x0, y0, false);
+      }
 
       if (x0 == x1 && y0 == y1) break;
 
@@ -220,7 +249,7 @@ class _CanvasScreenState extends State<CanvasScreen> {
     widget.canvas.cache.setPixel(x, y, widget.palette.colors[selectedColor]);
   }
 
-  void drawPixelCircle(int px, int py) {
+  void drawPixelCircle(int px, int py, bool redraw) {
     int width = widget.canvas.width();
     int height = widget.canvas.height();
     for (int y = py - radius; y <= py + radius; y++) {
@@ -237,7 +266,7 @@ class _CanvasScreenState extends State<CanvasScreen> {
       }
     }
 
-    _update();
+    _update(redraw);
   }
 }
 
