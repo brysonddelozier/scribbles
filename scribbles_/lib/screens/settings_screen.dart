@@ -7,12 +7,54 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Settings')
+      appBar: AppBar(title: const Text('Settings')),
+
+      body: ListView(
+        children: [
+          ListTile(
+            title: const Text('Appearance'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const PaletteWidget()),
+              );
+            },
+          ),
+          ListTile(
+            title: const Text('about'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const PrivacyScreen()),
+              );
+            },
+          ),
+        ],
       ),
-      body: Center(
-        child: const Text("This is the body of settings"),
-      ),
-    );  
+    );
+  }
+}
+
+class PaletteWidget extends StatelessWidget {
+  const PaletteWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Appearance')),
+      body: const Center(child: Text('Appearance')),
+    );
+  }
+}
+
+class PrivacyScreen extends StatelessWidget {
+  const PrivacyScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('About')),
+      body: const Center(child: Text('About')),
+    );
   }
 }
