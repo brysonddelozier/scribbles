@@ -97,7 +97,8 @@ class ApplicationState extends ChangeNotifier {
                       ],
                       palette: ColorPalette(key: data['user']),
                     ),
-                    user: data['user']
+                    user: data['user'],
+                    likeCount: data['likes'],
                   );
                   tempData[document.id] = tempPost;
                 }
@@ -123,6 +124,7 @@ class ApplicationState extends ChangeNotifier {
       'user': post.user,
       'timeStamp': post.timeStamp,
       'parentID': post.parentID,
+      'likes': post.likeCount,
       'layers': [for (ScribbleLayer layer in post.canvas.layers){
         {
           'drawing': layer.drawing,
