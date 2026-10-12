@@ -19,13 +19,17 @@ class ScribbleLayer {
   }) : drawing = List<int>.filled((width * height + 7) ~/ 8, 0);
 
   Color getPixel(int x, int y) {
+    return palette.colors[getPixelIndex(x, y)];
+  }
+
+  int getPixelIndex(int x, int y) {
     int index = this.index(x, y);
     int value = drawing[(index >> 3)]; // this is / 8
     int shift =
         (index & 7) <<
         2; // this is a mask that we shift over * 4 for the size of each color
 
-    return palette.colors[(value >> shift) & 0xF];
+    return (value >> shift) & 0xF;
   }
 
   // index in palette
@@ -110,7 +114,12 @@ class ScribbleCanvas {
     double r = color.r, g = color.g, b = color.b;
 
     for (int i = 1; i < layers.length; i++) {
-      Color col = layers[i].getPixel(x, y);
+      int palleteIdx = layers[i].getPixelIndex(x, y);
+      // Color col = layers[i].getPixel(x, y);
+
+      // treat white as transparent.
+      if (palleteIdx == 0) continue;
+      Color col = palette.colors[palleteIdx];
 
       r = (col.r + r) * 0.5;
       g = (col.g + g) * 0.5;
@@ -140,8 +149,11 @@ class ScribbleCanvas {
     return cache.height;
   }
 
-  Future<ui.Image> toImage() async {
-    // redraw(); // optional
+  Future<ui.Image> toImage({bool redrawCanvas = false}) async {
+    if (redrawCanvas) {
+      redraw();
+    }
+
     final w = width();
     final h = height();
 
