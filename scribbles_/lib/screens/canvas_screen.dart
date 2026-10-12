@@ -45,7 +45,7 @@ class _CanvasScreenState extends State<CanvasScreen> {
     height = widget.canvas.height();
 
     super.initState();
-    _update();
+    _update(true);
   }
 
   Offset toCanvasPosition(
@@ -70,9 +70,11 @@ class _CanvasScreenState extends State<CanvasScreen> {
         position.dy < height;
   }
 
-  Future<void> _update() async {
+  Future<void> _update(bool redraw) async {
     if (rendering) return;
     rendering = true;
+
+    if (redraw) widget.canvas.redraw();
 
     Future.microtask(() async {
       _uiImage = await widget.canvas.toImage();
@@ -93,7 +95,8 @@ class _CanvasScreenState extends State<CanvasScreen> {
             children: [
               AspectRatio(
                 aspectRatio: 1,
-                child: Container(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(5),
                   child: LayoutBuilder(
                     builder: (context, constraints) {
                       final double widgetWidth = constraints.maxWidth;
@@ -128,13 +131,20 @@ class _CanvasScreenState extends State<CanvasScreen> {
                   ),
                 ),
               ),
-              PaletteWidget(palette: widget.palette, callback: _changeColor),
+              PaletteWidget(
+                selectedColor,
+                palette: widget.palette,
+                callback: _changeColor,
+              ),
+              Slider(onChanged: () ,)
             ],
           ),
         ),
       ),
     );
   }
+
+  void _changeBrushSize(double value)
 
   void _changeColor(int value) {
     selectedColor = value;
@@ -237,7 +247,7 @@ class _CanvasScreenState extends State<CanvasScreen> {
       }
     }
 
-    _update();
+    _update(false);
   }
 }
 

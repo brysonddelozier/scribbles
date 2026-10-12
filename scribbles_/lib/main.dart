@@ -1,12 +1,33 @@
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:scribbles/objects/canvas.dart';
+import 'package:scribbles/objects/palette.dart';
+import 'package:scribbles/screens/canvas_screen.dart';
+
 import 'app_state.dart';
+
 import 'package:flutter/material.dart';
 import 'package:scribbles/screens/main_screen.dart';
-import 'package:go_router/go_router.dart'; 
+import 'package:go_router/go_router.dart';
+
+late ScribbleCanvas canvas;
+late ScribbleLayer layer;
+late ColorPalette palette;
 
 void main() {
-  runApp(const MyApp());
+  palette = ColorPalette(key: "lukespeer");
+  canvas = ScribbleCanvas(palette, 1024, 1024);
+  runApp(CanvasTest());
+}
+
+class CanvasTest extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: CanvasScreen(canvas: canvas, palette: palette),
+      theme: ThemeData.dark(),
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -41,9 +62,7 @@ final _router = GoRouter(
                 ForgotPasswordAction(((context, email) {
                   final uri = Uri(
                     path: '/sign-in/forgot-password',
-                    queryParameters: <String, String?>{
-                      'email': email,
-                    },
+                    queryParameters: <String, String?>{'email': email},
                   );
                   context.push(uri.toString());
                 })),
@@ -51,7 +70,7 @@ final _router = GoRouter(
                   final user = switch (state) {
                     SignedIn state => state.user,
                     UserCreated state => state.credential.user,
-                    _ => null
+                    _ => null,
                   };
                   if (user == null) {
                     return;
@@ -62,8 +81,10 @@ final _router = GoRouter(
                   if (!user.emailVerified) {
                     user.sendEmailVerification();
                     const snackBar = SnackBar(
-                        content: Text(
-                            'Please check your email to verify your email address'));
+                      content: Text(
+                        'Please check your email to verify your email address',
+                      ),
+                    );
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   }
                   context.pushReplacement('/');
