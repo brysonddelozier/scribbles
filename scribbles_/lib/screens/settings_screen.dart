@@ -54,19 +54,15 @@ class SettingsScreen extends StatelessWidget {
           ],
         ),
       ),
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/Scribbles_Logo.png'),
-            fit: BoxFit.cover,
+      body: Column(
+        children: [
+          const SizedBox(height: 24),
+          Image.asset('assets/Scribbles_Logo.png', width: 200, height: 200),
+          const SizedBox(height: 24),
+          const Expanded(
+            child: Center(child: Text('Open the left menu to view settings.')),
           ),
-        ),
-
-        child: const SizedBox(
-          height: double.infinity,
-          width: double.infinity,
-          child: Center(child: Text('Open the left menu to view settings.')),
-        ),
+        ],
       ),
     );
   }
@@ -79,19 +75,38 @@ class AppearanceScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Appearance')),
-
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Align(
-          alignment: Alignment.topCenter,
-          child: PaletteWidget(
-            0,
-            palette: ColorPalette(key: 'default'),
-            callback: (selectedColorIndex) {
-              // Handle the selected color index here.
-            },
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Color Palette', style: TextStyle(fontSize: 18)),
+                  const ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text('Palette based on your username'),
+                    subtitle: Text(
+                      'These are the colors available for customization.',
+                    ),
+                  ),
+                  const Divider(),
+                  const SizedBox(height: 12),
+                  PaletteWidget(
+                    0,
+                    palette: ColorPalette(key: 'Scribbles'),
+                    callback: (int index) {
+                      // Handle color selection if needed
+                    },
+                  ),
+                ],
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
