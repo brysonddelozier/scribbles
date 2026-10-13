@@ -8,17 +8,24 @@ import 'package:go_router/go_router.dart';
 import 'auth_widgets.dart';
 
 class AuthFunc extends StatelessWidget {
-  const AuthFunc({super.key, required this.loggedIn, required this.signOut});
+  const AuthFunc({
+    super.key,
+    required this.loggedIn,
+    required this.signOut,
+    required this.mainAxisAlignment,
+  });
 
   final bool loggedIn;
   final void Function() signOut;
+  final MainAxisAlignment mainAxisAlignment;
 
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: mainAxisAlignment,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 24, bottom: 8),
+          padding: const EdgeInsets.only(left: 24, top: 400, bottom: 8),
           child: StyledButton(
             onPressed: () {
               !loggedIn ? context.push('/sign-in') : signOut();
@@ -29,7 +36,7 @@ class AuthFunc extends StatelessWidget {
         Visibility(
           visible: loggedIn,
           child: Padding(
-            padding: const EdgeInsets.only(left: 24, bottom: 8),
+            padding: const EdgeInsets.only(left: 24, top: 400, bottom: 8),
             child: StyledButton(
               onPressed: () {
                 context.push('/profile');
