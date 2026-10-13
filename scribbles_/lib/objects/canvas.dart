@@ -16,7 +16,7 @@ class ScribbleLayer {
     required this.palette,
     required this.width,
     required this.height,
-  }) : drawing = List<int>.filled((width * height + 7) ~/ 8, 0);
+  }) : drawing = List<int>.filled((width * height) ~/ 16, 0);
   ScribbleLayer.withDrawing({
     required this.palette,
     required this.width,
@@ -30,20 +30,18 @@ class ScribbleLayer {
 
   int getPixelIndex(int x, int y) {
     int index = this.index(x, y);
-    int value = drawing[(index >> 3)]; // this is / 8
-    int shift =
-        (index & 7) <<
-        2; // this is a mask that we shift over * 4 for the size of each color
+    int value = drawing[index >> 4]; // divide by 16
+    int shift = (index & 15) << 2; // 4 bits per pixel
 
-    return (value >> shift) & 0xF;
+    return ((value >> shift) & 0xF);
   }
 
   // index in palette
   // DO NOT CHANGE ANY OF THIS
   void setPixel(int x, int y, int colorIndex) {
     int index = this.index(x, y);
-    int posIndex = index >> 3;
-    int shift = (index & 7) << 2;
+    int posIndex = index >> 4;
+    int shift = (index & 15) << 2;
     int mask = 0xF << shift;
 
     drawing[posIndex] =
@@ -121,7 +119,6 @@ class ScribbleCanvas {
 
     for (int i = 1; i < layers.length; i++) {
       int palleteIdx = layers[i].getPixelIndex(x, y);
-      // Color col = layers[i].getPixel(x, y);
 
       // treat white as transparent.
       if (palleteIdx == 0) continue;

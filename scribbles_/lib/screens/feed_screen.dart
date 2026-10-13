@@ -9,7 +9,6 @@ import 'package:scribbles/screens/canvas_screen.dart';
 import 'package:scribbles/storage.dart';
 import 'package:scribbles/widgets/post_widget.dart';
 
-
 import 'dart:math';
 
 class FeedScreen extends StatefulWidget {
@@ -20,8 +19,7 @@ class FeedScreen extends StatefulWidget {
 }
 
 class _FeedScreenState extends State<FeedScreen> {
-
-  Future<void> _futurePosts =  Future.value();
+  Future<void> _futurePosts = Future.value();
 
   @override
   void initState() {
@@ -41,18 +39,8 @@ class _FeedScreenState extends State<FeedScreen> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              'Scribbles',
-              style: GoogleFonts.nanumPenScript(
-                fontSize: 50,
-              ),
-            ),
-            Text(
-              'Feed',
-              style: GoogleFonts.nanumPenScript(
-                fontSize: 50,
-              ),
-            ),
+            Text('Scribbles', style: GoogleFonts.nanumPenScript(fontSize: 50)),
+            Text('Feed', style: GoogleFonts.nanumPenScript(fontSize: 50)),
           ],
         ),
       ),
@@ -89,15 +77,13 @@ class _FeedScreenState extends State<FeedScreen> {
                     ),
                   ],
                 );
-              }
-              else {
+              } else {
                 return CircularProgressIndicator();
               }
-              
             },
           );
         },
-      //appBar: AppBar(title: const Text('Feed')),
+        //appBar: AppBar(title: const Text('Feed')),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
@@ -151,7 +137,7 @@ class _FeedScreenState extends State<FeedScreen> {
                       CanvasScreen(canvas: canvas, palette: palette),
                       FilledButton.icon(
                         onPressed: () => _onPost(context, canvas),
-                        icon: const Icon(Icons.plus_one),
+                        icon: const Icon(Icons.upload),
                         label: const Text('Post'),
                       ),
                     ],
