@@ -73,67 +73,12 @@ class SettingsScreen extends StatelessWidget {
 class AppearanceScreen extends StatelessWidget {
   const AppearanceScreen({super.key});
 
-  static const List<_PaletteOption> _palettes = [
-    _PaletteOption('Sunset', Color(0xFFFF6F61)),
-    _PaletteOption('Ocean', Color(0xFF3F51B5)),
-    _PaletteOption('Forest', Color(0xFF2E7D32)),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Appearance')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Select a color palette:',
-              style: TextStyle(fontSize: 18),
-            ),
-            const SizedBox(height: 16),
-            Expanded(
-              child: ListView.builder(
-                itemCount: _palettes.length,
-                itemBuilder: (context, index) {
-                  final palette = _palettes[index];
-                  return ListTile(
-                    title: Text(palette.name),
-                    leading: CircleAvatar(
-                      backgroundColor: palette.primaryColor,
-                    ),
-                    onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Selected ${palette.name}')),
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
 
-class _PaletteOption {
-  const _PaletteOption(this.name, this.primaryColor);
-
-  final String name;
-  final Color primaryColor;
-}
-
-class PaletteScreen extends StatelessWidget {
-  const PaletteScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Palette')),
-      body: const Center(child: Text('This is the Palette screen.')),
+      body: const Center(child: Text('Appearance')),
     );
   }
 }
