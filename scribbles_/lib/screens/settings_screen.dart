@@ -17,6 +17,7 @@ class SettingsScreen extends StatelessWidget {
             ),
 
             ListTile(
+              leading: const Icon(Icons.palette),
               title: const Text('Appearance'),
               onTap: () {
                 // Close the drawer first.
@@ -35,6 +36,7 @@ class SettingsScreen extends StatelessWidget {
             const Divider(),
 
             ListTile(
+              leading: const Icon(Icons.info_outline),
               title: const Text('About'),
               onTap: () {
                 Navigator.pop(context);
@@ -50,11 +52,19 @@ class SettingsScreen extends StatelessWidget {
           ],
         ),
       ),
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/Scribbles_Logo.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
 
-      body: const SizedBox(
-        height: double.infinity,
-        width: double.infinity,
-        child: Center(child: Text('Open the left menu to view settings.')),
+        child: const SizedBox(
+          height: double.infinity,
+          width: double.infinity,
+          child: Center(child: Text('Open the left menu to view settings.')),
+        ),
       ),
     );
   }
