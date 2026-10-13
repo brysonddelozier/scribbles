@@ -9,6 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:scribbles/objects/canvas.dart';
 import 'package:scribbles/objects/palette.dart';
 import 'package:scribbles/objects/post.dart';
+import 'package:scribbles/objects/user.dart';
 
 import 'firebase_options.dart';
 import 'storage.dart';
@@ -61,13 +62,10 @@ class ApplicationState extends ChangeNotifier {
           .listen(
             (snapshot) {
               try {
-                final tempData = <String, Map<String, Object>>{};
+                final tempData = <String, ScribbleUser>{};
                 for (final document in snapshot.docs) {
                   final data = document.data();
-                  tempData[document.id] = {
-                    'Username': data['Username'] as String,
-                    'pfp': data['pfp'] as String,
-                  };
+                  tempData[document.id] = ScribbleUser(username: data['Username']);
                 }
                 Storage.data.profiles = tempData;
               } catch (error, stackTrace) {
