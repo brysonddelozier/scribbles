@@ -85,8 +85,9 @@ class AppearanceScreen extends StatelessWidget {
         child: Align(
           alignment: Alignment.topCenter,
           child: PaletteWidget(
-            palette: ColorPalette(key: 'scribbles'),
-            callback: (int index) {
+            0,
+            palette: ColorPalette(key: 'default'),
+            callback: (selectedColorIndex) {
               // Handle the selected color index here.
             },
           ),
