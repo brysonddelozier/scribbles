@@ -29,7 +29,7 @@ class DataHolder{
   }
   set sortedPosts(Map<String, Post> map){
     List<Post> tempList = map.values.toList();
-    tempList.sort((a, b) => (a.timeStamp.compareTo(b.timeStamp)),);
+    tempList.sort((a, b) => (b.timeStamp.compareTo(a.timeStamp)),);
     _sortedPosts = tempList;
   }
 
