@@ -83,19 +83,8 @@ class FeedScreen extends StatelessWidget {
 
   Future<void> _onPost(BuildContext context, ScribbleCanvas canvas) async {
     final appState = context.read<ApplicationState>();
-    final messenger = ScaffoldMessenger.of(context);
-    final navigator = Navigator.of(context);
-
-    try {
-      await appState.createPost(canvas);
-      if (!context.mounted) return;
-      navigator.pop();
-      messenger.showSnackBar(const SnackBar(content: Text('Post saved.')));
-    } catch (error) {
-      if (!context.mounted) return;
-      messenger.showSnackBar(
-        SnackBar(content: Text('Unable to save post: $error')),
-      );
-    }
+    final NavigatorState navigator = Navigator.of(context);
+    appState.createPost(canvas);
+    navigator.pop();
   }
 }
