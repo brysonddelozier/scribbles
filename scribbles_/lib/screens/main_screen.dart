@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:scribbles/screens/feed_screen.dart';
 import 'package:scribbles/screens/settings_screen.dart';
 import 'package:scribbles/screens/profile_screen.dart';
+import 'package:scribbles/app_state.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});

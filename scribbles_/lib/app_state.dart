@@ -72,6 +72,7 @@ class ApplicationState extends ChangeNotifier {
                   );
                 }
                 Storage.data.profiles = tempData;
+                notifyListeners();
               } catch (error, stackTrace) {
                 _reportError('Profiles data', error, stackTrace);
               }

@@ -10,8 +10,27 @@ import 'package:scribbles/widgets/post_widget.dart';
 
 import 'dart:math';
 
-class FeedScreen extends StatelessWidget {
+class FeedScreen extends StatefulWidget {
   const FeedScreen({super.key});
+
+  @override
+  State<FeedScreen> createState() => _FeedScreenState();
+}
+
+class _FeedScreenState extends State<FeedScreen> {
+
+  Future<void> _futurePosts =  Future.value();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _futurePosts = Provider.of<ApplicationState>(context, listen: false).future;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,38 +39,45 @@ class FeedScreen extends StatelessWidget {
       body: Consumer<ApplicationState>(
         builder: (context, appState, _) {
           return FutureBuilder(
-            future: appState.future,
+            future: _futurePosts,
             builder: (context, snapshot) {
-              final posts = Storage.data.sortedPosts;
+              if (snapshot.connectionState == ConnectionState.done) {
+                final posts = Storage.data.sortedPosts;
 
-              if (posts.isEmpty) {
-                return const Center(
-                  child: Text('No posts yet', style: TextStyle(fontSize: 18)),
+                if (posts.isEmpty) {
+                  return const Center(
+                    child: Text('No posts yet', style: TextStyle(fontSize: 18)),
+                  );
+                }
+
+                return CustomScrollView(
+                  slivers: <Widget>[
+                    SliverList(
+                      delegate: SliverChildBuilderDelegate((
+                        BuildContext context,
+                        int index,
+                      ) {
+                        final post = posts[index];
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 8.0,
+                            horizontal: 12.0,
+                          ),
+                          child: PostWidget(post: post),
+                        );
+                      }, childCount: posts.length),
+                    ),
+                  ],
                 );
               }
-
-              return CustomScrollView(
-                slivers: <Widget>[
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate((
-                      BuildContext context,
-                      int index,
-                    ) {
-                      final post = posts[index];
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 8.0,
-                          horizontal: 12.0,
-                        ),
-                        child: PostWidget(post: post),
-                      );
-                    }, childCount: posts.length),
-                  ),
-                ],
-              );
+              else {
+                return CircularProgressIndicator();
+              }
+              
             },
           );
         },
+      //appBar: AppBar(title: const Text('Feed')),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
