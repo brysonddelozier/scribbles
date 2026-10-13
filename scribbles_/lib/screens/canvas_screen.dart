@@ -39,7 +39,7 @@ class _CanvasScreenState extends State<CanvasScreen> {
   int? _lastY;
 
   bool rendering = false;
-  BitArray bitField = BitArray(1000 * 1000);
+  BitArray bitField = BitArray(256 * 256);
 
   @override
   void initState() {
@@ -242,7 +242,7 @@ class _CanvasScreenState extends State<CanvasScreen> {
   }
 
   void setPixel(int x, int y, int selectedColor) {
-    int idx = (y * 1000) + x;
+    int idx = (y * 256) + x;
     if (!bitField[idx]) {
       bitField[idx] = true;
       widget.canvas.layer.setPixel(x, y, selectedColor);

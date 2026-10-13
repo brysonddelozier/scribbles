@@ -35,6 +35,9 @@ class _FeedScreenState extends State<FeedScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<ApplicationState>(context, listen: false).callback = () {
+      setState(() {});
+    };
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -99,7 +102,7 @@ class _FeedScreenState extends State<FeedScreen> {
               ColorPalette palette = ColorPalette(
                 key: (Storage.data.currentUsername() ?? 'John Doe'),
               );
-              ScribbleCanvas canvas = ScribbleCanvas(palette, 1000, 1000);
+              ScribbleCanvas canvas = ScribbleCanvas(palette, 256, 256);
 
               // Get the device screen size to make the dialog responsive
               final screenSize = MediaQuery.of(context).size;
@@ -165,6 +168,8 @@ class _FeedScrollableWidgetState extends State<FeedScrollableWidget> {
   @override
   Widget build(BuildContext context) {
     final posts = Storage.data.sortedPosts;
+
+    print("rebuilding!");
 
     return CustomScrollView(
       scrollCacheExtent: ScrollCacheExtent.pixels(5000),

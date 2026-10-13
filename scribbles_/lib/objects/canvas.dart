@@ -105,8 +105,8 @@ class ScribbleCanvas {
   ScribbleCanvas.withLayers({
     required this.layers,
     required this.palette,
-    int width = 1000,
-    int height = 1000,
+    int width = 256,
+    int height = 256,
   }) : layer = ScribbleLayer(palette: palette, width: width, height: height),
        cache = MergedLayer(width: width, height: height) {
     layers.add(layer);

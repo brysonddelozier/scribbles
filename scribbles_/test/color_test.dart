@@ -29,8 +29,8 @@ void main() {
     ColorPalette palette = ColorPalette(key: "lukespeer");
     ScribbleLayer canvas = ScribbleLayer(
       palette: palette,
-      width: 1000,
-      height: 1000,
+      width: 256,
+      height: 256,
     );
 
     assert(canvas.getPixel(0, 0) == palette.colors[0]);
@@ -45,21 +45,21 @@ void main() {
 
     ScribbleLayer layer1 = ScribbleLayer(
       palette: palette,
-      width: 1000,
-      height: 1000,
+      width: 256,
+      height: 256,
     );
     ScribbleLayer layer2 = ScribbleLayer(
       palette: palette,
-      width: 1000,
-      height: 1000,
+      width: 256,
+      height: 256,
     );
     ScribbleLayer layer3 = ScribbleLayer(
       palette: palette,
-      width: 1000,
-      height: 1000,
+      width: 256,
+      height: 256,
     );
 
-    ScribbleCanvas canvas = ScribbleCanvas(palette, 1000, 1000);
+    ScribbleCanvas canvas = ScribbleCanvas(palette, 256, 256);
     canvas.addLayer(layer1);
     canvas.addLayer(layer2);
     canvas.addLayer(layer3);
@@ -73,7 +73,7 @@ void main() {
   });
 
   test("Performance bitfield", () {
-    BitArray array = BitArray(1000 * 1000);
+    BitArray array = BitArray(256 * 256);
     final stopwatch = Stopwatch();
 
     array.setRange(0, array.length);
