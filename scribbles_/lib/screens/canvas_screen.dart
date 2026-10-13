@@ -39,7 +39,7 @@ class _CanvasScreenState extends State<CanvasScreen> {
   int? _lastY;
 
   bool rendering = false;
-  BitArray bitField = BitArray(1024 * 1024);
+  BitArray bitField = BitArray(1000 * 1000);
 
   @override
   void initState() {
@@ -96,41 +96,43 @@ class _CanvasScreenState extends State<CanvasScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              AspectRatio(
-                aspectRatio: 1,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(5),
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      final double widgetWidth = constraints.maxWidth;
-                      final double widgetHeight = constraints.maxHeight;
+              Flexible(
+                child: AspectRatio(
+                  aspectRatio: 1,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(5),
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        final double widgetWidth = constraints.maxWidth;
+                        final double widgetHeight = constraints.maxHeight;
 
-                      return GestureDetector(
-                        child: Center(
-                          child: AspectRatio(
-                            aspectRatio: 1,
-                            child: _uiImage == null
-                                ? null
-                                : RawImage(image: _uiImage),
+                        return GestureDetector(
+                          child: Center(
+                            child: AspectRatio(
+                              aspectRatio: 1,
+                              child: _uiImage == null
+                                  ? null
+                                  : RawImage(image: _uiImage),
+                            ),
                           ),
-                        ),
-                        onPanUpdate: (details) => _continueDrawing(
-                          details.localPosition,
-                          widgetWidth,
-                          widgetHeight,
-                        ),
-                        onPanStart: (details) => _startDrawing(
-                          details.localPosition,
-                          widgetWidth,
-                          widgetHeight,
-                        ),
-                        onPanEnd: (details) => _endDrawing(
-                          details.localPosition,
-                          widgetWidth,
-                          widgetHeight,
-                        ),
-                      );
-                    },
+                          onPanUpdate: (details) => _continueDrawing(
+                            details.localPosition,
+                            widgetWidth,
+                            widgetHeight,
+                          ),
+                          onPanStart: (details) => _startDrawing(
+                            details.localPosition,
+                            widgetWidth,
+                            widgetHeight,
+                          ),
+                          onPanEnd: (details) => _endDrawing(
+                            details.localPosition,
+                            widgetWidth,
+                            widgetHeight,
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),
@@ -240,7 +242,7 @@ class _CanvasScreenState extends State<CanvasScreen> {
   }
 
   void setPixel(int x, int y, int selectedColor) {
-    int idx = (y * 1024) + x;
+    int idx = (y * 1000) + x;
     if (!bitField[idx]) {
       bitField[idx] = true;
       widget.canvas.layer.setPixel(x, y, selectedColor);
@@ -286,7 +288,7 @@ class _CanvasWidgetState extends State<CanvasWidget> {
   @override
   void initState() {
     super.initState();
-    _image = widget.canvas.toImage();
+    _image = widget.canvas.toImage(redrawCanvas: true);
   }
 
   @override
@@ -294,11 +296,12 @@ class _CanvasWidgetState extends State<CanvasWidget> {
     return FutureBuilder(
       future: _image,
       builder: (context, snapshot) {
+        print("state done? " + snapshot.connectionState.name);
         if (snapshot.hasError) {
           return const Center(child: Icon(Icons.error_outline_outlined));
         }
 
-        if (snapshot.hasData) {
+        if (snapshot.connectionState == ConnectionState.done) {
           return Center(child: RawImage(image: snapshot.data!));
         }
 

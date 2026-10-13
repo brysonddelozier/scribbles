@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribbles/app_state.dart';
+import 'package:scribbles/main.dart';
 import 'package:scribbles/objects/canvas.dart';
 import 'package:scribbles/objects/palette.dart';
 import 'package:scribbles/screens/canvas_screen.dart';
 import 'package:scribbles/storage.dart';
 import 'package:scribbles/widgets/post_widget.dart';
+
+import 'dart:math';
 
 class FeedScreen extends StatelessWidget {
   const FeedScreen({super.key});
@@ -52,7 +55,7 @@ class FeedScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          showDialog(
+          /*showDialog(
             context: context,
             useSafeArea: true,
             builder: (context) {
@@ -74,7 +77,56 @@ class FeedScreen extends StatelessWidget {
                 ),
               );
             },
+          );*/
+
+          showDialog(
+            context: context,
+            useSafeArea: true,
+            builder: (context) {
+              ColorPalette palette = ColorPalette(
+                key: (Storage.data.currentUsername() ?? 'John Doe'),
+              );
+              ScribbleCanvas canvas = ScribbleCanvas(palette, 1000, 1000);
+
+              // Get the device screen size to make the dialog responsive
+              final screenSize = MediaQuery.of(context).size;
+              final dialogSize = min(
+                screenSize.width * 0.85,
+                screenSize.height * 0.85,
+              );
+
+              return Dialog(
+                // Prevents the background alert container from expanding infinitely
+                child: SizedBox(
+                  width: screenSize.width,
+                  height: screenSize.height,
+                  child: Stack(
+                    children: [
+                      CanvasScreen(canvas: canvas, palette: palette),
+                      FilledButton.icon(
+                        onPressed: () => _onPost(context, canvas),
+                        icon: const Icon(Icons.plus_one),
+                        label: const Text('Post'),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
           );
+
+          /*ColorPalette palette = ColorPalette(
+            key: (Storage.data.currentUsername() ?? 'John Doe'),
+          );
+          ScribbleCanvas canvas = ScribbleCanvas(palette, 1024, 1024);
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  CanvasScreen(canvas: canvas, palette: palette),
+            ),
+          );*/
         },
         label: const Icon(Icons.add),
       ),
