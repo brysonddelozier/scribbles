@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:scribbles/app_state.dart';
 import 'package:scribbles/main.dart';
 import 'package:scribbles/objects/canvas.dart';
@@ -7,6 +8,7 @@ import 'package:scribbles/objects/palette.dart';
 import 'package:scribbles/screens/canvas_screen.dart';
 import 'package:scribbles/storage.dart';
 import 'package:scribbles/widgets/post_widget.dart';
+
 
 import 'dart:math';
 
@@ -35,7 +37,25 @@ class _FeedScreenState extends State<FeedScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Feed')),
+      appBar: AppBar(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Scribbles',
+              style: GoogleFonts.nanumPenScript(
+                fontSize: 50,
+              ),
+            ),
+            Text(
+              'Feed',
+              style: GoogleFonts.nanumPenScript(
+                fontSize: 50,
+              ),
+            ),
+          ],
+        ),
+      ),
       body: Consumer<ApplicationState>(
         builder: (context, appState, _) {
           return FutureBuilder(

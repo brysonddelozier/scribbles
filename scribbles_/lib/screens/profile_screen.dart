@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../app_state.dart';
 
@@ -14,7 +15,25 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Profile')),
+            appBar: AppBar(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Scribbles',
+              style: GoogleFonts.nanumPenScript(
+                fontSize: 50,
+              ),
+            ),
+            Text(
+              'Profile',
+              style: GoogleFonts.nanumPenScript(
+                fontSize: 50,
+              ),
+            ),
+          ],
+        ),
+      ),
       body: Center(
         child: Column(
           children: [

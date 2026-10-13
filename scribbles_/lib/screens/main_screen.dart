@@ -37,7 +37,7 @@ class _MainScreenState extends State<MainScreen> {
             icon: Icon(
               Icons.home,
             ),
-            label: "Home",
+            label: "Feed",
           ),
           BottomNavigationBarItem(
             icon: Icon(
