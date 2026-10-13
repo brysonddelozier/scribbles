@@ -207,4 +207,8 @@ class ApplicationState extends ChangeNotifier {
     unawaited(_postsSubscription?.cancel());
     super.dispose();
   }
+
+  void changeUsername(String? newUsername ){
+    writeProfile(newUsername?? "John Doe", '');
+  }
 }

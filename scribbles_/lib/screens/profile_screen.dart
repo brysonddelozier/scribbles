@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:scribbles/storage.dart';
 
 import '../app_state.dart';
 
@@ -10,13 +11,17 @@ import 'package:provider/provider.dart';
 import '../authentication.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+  ProfileScreen({super.key});
+
+  TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
+    controller = TextEditingController(text: Storage.data.currentUsername());
+
     return Scaffold(
             appBar: AppBar(
-        title: Row(
+        title: Row( 
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
@@ -46,6 +51,8 @@ class ProfileScreen extends StatelessWidget {
                 },
               ),
             ),
+            TextField(onChanged: (s) => context.read<ApplicationState>().changeUsername(s),
+            controller: controller)
           ],
         ),
       ),
