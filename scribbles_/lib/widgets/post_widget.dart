@@ -9,7 +9,15 @@ class PostWidget extends StatelessWidget {
 
   PostWidget({super.key, required this.post});
 
-  BoxDecoration boxDecoration() {
+  BoxDecoration widgetDecoration() {
+    return BoxDecoration(
+      border: Border(
+        bottom: BorderSide(width: 1, color: Colors.grey.shade200),
+      ),
+    );
+  }
+
+  BoxDecoration imageDecoration() {
     return BoxDecoration(
       border: Border.all(width: 1, color: Colors.grey.shade200),
     );
@@ -18,18 +26,34 @@ class PostWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: boxDecoration(),
+      decoration: widgetDecoration(),
       child: Column(
         children: [
+          SizedBox(height: 20),
           Container(
-            decoration: boxDecoration(),
+            decoration: imageDecoration(),
             child: CanvasWidget(canvas: post.canvas),
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.thumb_up),
-              Text(post.likeCount.toString()),
+              IconButton(
+                icon: const Icon(Icons.chat_outlined),
+                onPressed: () {
+                  numReplies += 1;
+                }
+              ),
+              SizedBox(width: 10),
+              Text(numReplies.toString()),
+              SizedBox(width: 200),
+              IconButton(
+                icon: const Icon(Icons.thumb_up),
+                onPressed: () {
+                  numLikes += 1;
+                }
+              ),
+              SizedBox(width: 10),
+              Text(numLikes.toString()),
             ],
           ),
         ],
