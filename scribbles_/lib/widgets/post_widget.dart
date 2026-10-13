@@ -1,6 +1,7 @@
 import 'package:scribbles/objects/post.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:scribbles/screens/canvas_screen.dart';
 
 class PostWidget extends StatelessWidget {
   String image = 'assets/duck.png';
@@ -10,10 +11,7 @@ class PostWidget extends StatelessWidget {
 
   BoxDecoration boxDecoration() {
     return BoxDecoration(
-      border: Border.all(
-        width: 1,
-        color: Colors.grey.shade200,
-      ),
+      border: Border.all(width: 1, color: Colors.grey.shade200),
     );
   }
 
@@ -25,7 +23,7 @@ class PostWidget extends StatelessWidget {
         children: [
           Container(
             decoration: boxDecoration(),
-            child: Image.asset(image),
+            child: CanvasWidget(canvas: post.canvas),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
