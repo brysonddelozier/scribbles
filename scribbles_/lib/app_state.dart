@@ -41,6 +41,13 @@ class ApplicationState extends ChangeNotifier {
       _authSubscription = FirebaseAuth.instance.userChanges().listen(
         (user) {
           _loggedIn = user != null;
+          Storage.data.loggedIn = loggedIn;
+          if(_loggedIn){
+            Storage.data.currentUserID = user!.uid;
+          }
+          else{
+            Storage.data.currentUserID = null;
+          }
           notifyListeners();
         },
         onError: (Object error, StackTrace stackTrace) {

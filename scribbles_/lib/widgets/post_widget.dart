@@ -3,12 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class PostWidget extends StatelessWidget {
-  int? id;
-  int? parentID;
-  int? numLikes = 0;
   String image = 'assets/duck.png';
+  Post post;
 
-  PostWidget({super.key, this.id, this.parentID, this.numLikes, required this.image});
+  PostWidget({super.key, required this.post});
 
   BoxDecoration boxDecoration() {
     return BoxDecoration(
@@ -33,7 +31,7 @@ class PostWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               const Icon(Icons.thumb_up),
-              Text(numLikes.toString()),
+              Text(post.likeCount.toString()),
             ],
           ),
         ],

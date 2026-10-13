@@ -22,6 +22,9 @@ class Storage {
 class DataHolder{
   Map<String, Map<String, Object>> profiles;
   Map<String, Post> posts;
+  String? currentUserID;
+  bool loggedIn;
+  
 
-  DataHolder():profiles = Map(), posts = Map();
+  DataHolder():profiles = Map(), posts = Map(), loggedIn = false;
 }
