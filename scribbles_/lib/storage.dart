@@ -23,9 +23,23 @@ class Storage {
 class DataHolder{
   Map<String, ScribbleUser> profiles;
   Map<String, Post> posts;
+  List<Post> _sortedPosts;
+  List<Post> get sortedPosts{
+    return _sortedPosts;
+  }
+  set sortedPosts(Map<String, Post> map){
+    List<Post> tempList = map.values.toList();
+    tempList.sort((a, b) => (a.timeStamp.compareTo(b.timeStamp)),);
+    _sortedPosts = tempList;
+  }
+
   String? currentUserID;
   bool loggedIn;
+
+  String? currentUsername(){
+    return profiles[currentUserID]?.username;
+  }
   
 
-  DataHolder():profiles = Map(), posts = Map(), loggedIn = false;
+  DataHolder():profiles = Map(), posts = Map(), loggedIn = false, _sortedPosts = [];
 }

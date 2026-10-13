@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:scribbles/app_state.dart';
 import 'package:scribbles/objects/canvas.dart';
 import 'package:scribbles/objects/palette.dart';
 import 'package:scribbles/screens/canvas_screen.dart';
-
-import 'package:scribbles/screens/main_screen.dart';
 import 'package:scribbles/storage.dart';
 import 'package:scribbles/widgets/post_widget.dart';
 
@@ -15,21 +14,36 @@ class FeedScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Feed')),
-      body: CustomScrollView(
-        slivers: <Widget>[
-          SliverFixedExtentList(
-            itemExtent: 400.0,
-            delegate: SliverChildBuilderDelegate((
-              BuildContext context,
-              int index,
-            ) {
-              return Container(
-                alignment: Alignment.center,
-                child: PostWidget(post: Storage.data.posts,),
-              );
-            }),
-          ),
-        ],
+      body: Consumer<ApplicationState>(
+        builder: (context, appState, _) {
+          final posts = Storage.data.sortedPosts;
+
+          if (posts.isEmpty) {
+            return const Center(
+              child: Text('No posts yet', style: TextStyle(fontSize: 18)),
+            );
+          }
+
+          return CustomScrollView(
+            slivers: <Widget>[
+              SliverList(
+                delegate: SliverChildBuilderDelegate((
+                  BuildContext context,
+                  int index,
+                ) {
+                  final post = posts[index];
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 8.0,
+                      horizontal: 12.0,
+                    ),
+                    child: PostWidget(post: post),
+                  );
+                }, childCount: posts.length),
+              ),
+            ],
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
@@ -38,11 +52,7 @@ class FeedScreen extends StatelessWidget {
             useSafeArea: true,
             builder: (context) {
               ColorPalette palette = ColorPalette(
-                key:
-                    Storage.data.profiles[Storage
-                            .data
-                            .currentUserID]!["username"]
-                        as String,
+                key: (Storage.data.currentUsername() ?? 'John Doe'),
               );
               ScribbleCanvas canvas = ScribbleCanvas(palette, 1024, 1024);
 
@@ -51,11 +61,9 @@ class FeedScreen extends StatelessWidget {
                   children: [
                     CanvasScreen(canvas: canvas, palette: palette),
                     FilledButton.icon(
-                      onPressed: () {
-                        _onPost(canvas);
-                      },
-                      icon: Icon(Icons.plus_one),
-                      label: const Text("Post"),
+                      onPressed: () => _onPost(context, canvas),
+                      icon: const Icon(Icons.plus_one),
+                      label: const Text('Post'),
                     ),
                   ],
                 ),
@@ -68,5 +76,21 @@ class FeedScreen extends StatelessWidget {
     );
   }
 
-  void _onPost(ScribbleCanvas canvas) {}
+  Future<void> _onPost(BuildContext context, ScribbleCanvas canvas) async {
+    final appState = context.read<ApplicationState>();
+    final messenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
+
+    try {
+      await appState.createPost(canvas);
+      if (!context.mounted) return;
+      navigator.pop();
+      messenger.showSnackBar(const SnackBar(content: Text('Post saved.')));
+    } catch (error) {
+      if (!context.mounted) return;
+      messenger.showSnackBar(
+        SnackBar(content: Text('Unable to save post: $error')),
+      );
+    }
+  }
 }

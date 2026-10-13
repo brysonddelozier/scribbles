@@ -103,11 +103,13 @@ class ApplicationState extends ChangeNotifier {
                       palette: ColorPalette(key: data['user']),
                     ),
                     user: data['user'],
-                    likeCount: data['likes'],
+                    likeCount: (data['likes'] as int?) ?? 0,
                   );
                   tempData[document.id] = tempPost;
                 }
                 Storage.data.posts = tempData;
+                Storage.data.sortedPosts = tempData;
+                print("updated database posts!");
               } catch (error, stackTrace) {
                 _reportError('Posts data', error, stackTrace);
               }
@@ -120,25 +122,48 @@ class ApplicationState extends ChangeNotifier {
       _reportError('Firebase initialization', error, stackTrace);
     }
   }
-  // when a post is posted, call this method after setting up the Post object
-  void writePost(Post post){
+  Future<void> createPost(ScribbleCanvas canvas) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw StateError('You must be signed in to post.');
+    }
+
+    final postRef = FirebaseFirestore.instance.collection('posts').doc();
+    final post = Post(
+      id: postRef.id,
+      parentID: '',
+      timeStamp: DateTime.now().millisecondsSinceEpoch,
+      canvas: canvas,
+      user: user.uid,
+      likeCount: 0,
+    );
+
+    await writePost(post);
+  }
+
+  Future<void> writePost(Post post) async {
     final postDoc = FirebaseFirestore.instance
-    .collection('posts')
-    .doc(post.id);
-    postDoc.set({
-      'user': post.user,
-      'timeStamp': post.timeStamp,
-      'parentID': post.parentID,
-      'likes': post.likeCount,
-      'layers': [for (ScribbleLayer layer in post.canvas.layers){
-        {
-          'drawing': layer.drawing,
-          'height': layer.height,
-          'palette': layer.palette.key,
-          'width': layer.width,
-        }
-      } ]
-    }, SetOptions(merge: true));
+        .collection('posts')
+        .doc(post.id);
+    try {
+      await postDoc.set({
+        'user': post.user,
+        'timeStamp': post.timeStamp,
+        'parentID': post.parentID,
+        'layers': [
+          for (final layer in post.canvas.layers)
+            {
+              'drawing': layer.drawing,
+              'height': layer.height,
+              'palette': layer.palette.key,
+              'width': layer.width,
+            },
+        ],
+      });
+    } catch (error, stackTrace) {
+      _reportError('Saving post', error, stackTrace);
+      rethrow;
+    }
   }
 
   // id should be that of the current user, immutable
