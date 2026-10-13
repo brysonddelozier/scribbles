@@ -19,9 +19,10 @@ class ProfileScreen extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: 24),
+              const Icon(Icons.account_circle, size: 80),
               const CircleAvatar(
                 backgroundImage: AssetImage('images/pic.jpg'),
-                radius: 100,
+                radius: 80,
               ),
               OutlinedButton(
                 onPressed: () {
