@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:scribbles/screens/main_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -9,27 +8,53 @@ class SettingsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Settings')),
 
-      body: ListView(
-        children: [
-          ListTile(
-            title: const Text('Appearance'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const PaletteWidget()),
-              );
-            },
-          ),
-          ListTile(
-            title: const Text('about'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const PrivacyScreen()),
-              );
-            },
-          ),
-        ],
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+              child: Text('Scribbles Settings', style: TextStyle(fontSize: 24)),
+            ),
+
+            ListTile(
+              title: const Text('Appearance'),
+              onTap: () {
+                // Close the drawer first.
+                Navigator.pop(context);
+
+                // Open Appearance.
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const PaletteWidget(),
+                  ),
+                );
+              },
+            ),
+
+            const Divider(),
+
+            ListTile(
+              title: const Text('About'),
+              onTap: () {
+                Navigator.pop(context);
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const PrivacyScreen(),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+
+      body: const SizedBox(
+        height: double.infinity,
+        width: double.infinity,
+        child: Center(child: Text('Open the left menu to view settings.')),
       ),
     );
   }
@@ -54,46 +79,19 @@ class PrivacyScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('About')),
-      body: const Center(child: Text('About')),
-    );
-  }
-}
-
-class DividerExampleApp extends StatelessWidget {
-  const DividerExampleApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(title: const Text('Divider Example')),
-        body: ListView(
-          children: const [
-            ListTile(title: Text('Item 1')),
-            Divider(),
-            ListTile(title: Text('Item 2')),
-            Divider(),
-            ListTile(title: Text('Item 3')),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class DividerExample extends StatelessWidget {
-  const DividerExample({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Padding(
-        padding: .all(16.0),
-        child: Column(
-          children: <Widget>[
-            Expanded(child: Card(child: SizedBox.expand())),
-            Divider(),
-            Expanded(child: Card(child: SizedBox.expand())),
+      body: const Center(child: Text('Scribbles DEMO VERSION.')),
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            const Text('Powered by Flutter', style: TextStyle(fontSize: 16)),
+            const SizedBox(width: 48), // Placeholder for alignment
           ],
         ),
       ),
