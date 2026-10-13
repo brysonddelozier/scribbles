@@ -16,6 +16,7 @@ import 'storage.dart';
 
 class ApplicationState extends ChangeNotifier {
   ApplicationState() {
+    future = completedLoad.future;
     unawaited(init());
   }
 
@@ -30,6 +31,8 @@ class ApplicationState extends ChangeNotifier {
   _profilesSubscription;
   StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? _postsSubscription;
   bool _disposed = false;
+  Completer<void> completedLoad = Completer();
+  late Future<void> future;
 
   Future<void> init() async {
     try {
@@ -43,10 +46,9 @@ class ApplicationState extends ChangeNotifier {
         (user) {
           _loggedIn = user != null;
           Storage.data.loggedIn = loggedIn;
-          if(_loggedIn){
+          if (_loggedIn) {
             Storage.data.currentUserID = user!.uid;
-          }
-          else{
+          } else {
             Storage.data.currentUserID = null;
           }
           notifyListeners();
@@ -65,7 +67,9 @@ class ApplicationState extends ChangeNotifier {
                 final tempData = <String, ScribbleUser>{};
                 for (final document in snapshot.docs) {
                   final data = document.data();
-                  tempData[document.id] = ScribbleUser(username: data['Username']);
+                  tempData[document.id] = ScribbleUser(
+                    username: data['Username'],
+                  );
                 }
                 Storage.data.profiles = tempData;
               } catch (error, stackTrace) {
@@ -97,7 +101,9 @@ class ApplicationState extends ChangeNotifier {
                             palette: ColorPalette(key: layer['palette']),
                             width: layer['width'] as int,
                             height: layer['height'] as int,
-                            drawing: layer['drawing'] as List<int>,
+                            drawing: List<int>.from(
+                              layer['drawing'] as List<dynamic>,
+                            ),
                           ),
                       ],
                       palette: ColorPalette(key: data['user']),
@@ -110,6 +116,7 @@ class ApplicationState extends ChangeNotifier {
                 Storage.data.posts = tempData;
                 Storage.data.sortedPosts = tempData;
                 print("updated database posts!");
+                completedLoad.complete();
               } catch (error, stackTrace) {
                 _reportError('Posts data', error, stackTrace);
               }
@@ -122,6 +129,7 @@ class ApplicationState extends ChangeNotifier {
       _reportError('Firebase initialization', error, stackTrace);
     }
   }
+
   Future<void> createPost(ScribbleCanvas canvas) async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
@@ -142,9 +150,7 @@ class ApplicationState extends ChangeNotifier {
   }
 
   Future<void> writePost(Post post) async {
-    final postDoc = FirebaseFirestore.instance
-        .collection('posts')
-        .doc(post.id);
+    final postDoc = FirebaseFirestore.instance.collection('posts').doc(post.id);
     try {
       await postDoc.set({
         'user': post.user,
@@ -169,14 +175,11 @@ class ApplicationState extends ChangeNotifier {
   // id should be that of the current user, immutable
   // username can be changed freely
   // pfp is the ID of the post displayed as a profile picture (not sure if we will implement this in time)
-  void writeProfile(String username, String pfp){
+  void writeProfile(String username, String pfp) {
     final profileDoc = FirebaseFirestore.instance
-    .collection('profiles')
-    .doc(FirebaseAuth.instance.currentUser!.uid);
-    profileDoc.set({
-      'Username': username,
-      'pfp': pfp,
-    }, SetOptions(merge: true));
+        .collection('profiles')
+        .doc(FirebaseAuth.instance.currentUser!.uid);
+    profileDoc.set({'Username': username, 'pfp': pfp}, SetOptions(merge: true));
   }
 
   void clearError() {

@@ -40,20 +40,20 @@ class PostWidget extends StatelessWidget {
               IconButton(
                 icon: const Icon(Icons.chat_outlined),
                 onPressed: () {
-                  numReplies += 1;
+                  //numReplies += 1;
                 }
               ),
               SizedBox(width: 10),
-              Text(numReplies.toString()),
+              Text(/*numReplies.toString()*/ "0"),
               SizedBox(width: 200),
               IconButton(
                 icon: const Icon(Icons.thumb_up),
                 onPressed: () {
-                  numLikes += 1;
+                  post.likeCount += 1;
                 }
               ),
               SizedBox(width: 10),
-              Text(numLikes.toString()),
+              Text(/*numLikes.toString()*/ "0"),
             ],
           ),
         ],
