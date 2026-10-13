@@ -117,7 +117,7 @@ class ApplicationState extends ChangeNotifier {
                 Storage.data.posts = tempData;
                 Storage.data.sortedPosts = tempData;
                 print("updated database posts!");
-                completedLoad.complete();
+                if (!completedLoad.isCompleted) completedLoad.complete();
               } catch (error, stackTrace) {
                 _reportError('Posts data', error, stackTrace);
               }
