@@ -9,12 +9,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:scribbles/objects/canvas.dart';
 import 'package:scribbles/objects/palette.dart';
 import 'package:scribbles/objects/post.dart';
+import 'package:scribbles/objects/user.dart';
 
 import 'firebase_options.dart';
 import 'storage.dart';
 
 class ApplicationState extends ChangeNotifier {
   ApplicationState() {
+    future = completedLoad.future;
     unawaited(init());
   }
 
@@ -29,6 +31,8 @@ class ApplicationState extends ChangeNotifier {
   _profilesSubscription;
   StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? _postsSubscription;
   bool _disposed = false;
+  Completer<void> completedLoad = Completer();
+  late Future<void> future;
 
   Future<void> init() async {
     try {
@@ -41,6 +45,12 @@ class ApplicationState extends ChangeNotifier {
       _authSubscription = FirebaseAuth.instance.userChanges().listen(
         (user) {
           _loggedIn = user != null;
+          Storage.data.loggedIn = loggedIn;
+          if (_loggedIn) {
+            Storage.data.currentUserID = user!.uid;
+          } else {
+            Storage.data.currentUserID = null;
+          }
           notifyListeners();
         },
         onError: (Object error, StackTrace stackTrace) {
@@ -54,13 +64,12 @@ class ApplicationState extends ChangeNotifier {
           .listen(
             (snapshot) {
               try {
-                final tempData = <String, Map<String, Object>>{};
+                final tempData = <String, ScribbleUser>{};
                 for (final document in snapshot.docs) {
                   final data = document.data();
-                  tempData[document.id] = {
-                    'Username': data['Username'] as String,
-                    'pfp': data['pfp'] as String,
-                  };
+                  tempData[document.id] = ScribbleUser(
+                    username: data['Username'],
+                  );
                 }
                 Storage.data.profiles = tempData;
               } catch (error, stackTrace) {
@@ -92,17 +101,22 @@ class ApplicationState extends ChangeNotifier {
                             palette: ColorPalette(key: layer['palette']),
                             width: layer['width'] as int,
                             height: layer['height'] as int,
-                            drawing: layer['drawing'] as List<int>,
+                            drawing: List<int>.from(
+                              layer['drawing'] as List<dynamic>,
+                            ),
                           ),
                       ],
                       palette: ColorPalette(key: data['user']),
                     ),
                     user: data['user'],
-                    likeCount: data['likes'],
+                    likeCount: (data['likes'] as int?) ?? 0,
                   );
                   tempData[document.id] = tempPost;
                 }
                 Storage.data.posts = tempData;
+                Storage.data.sortedPosts = tempData;
+                print("updated database posts!");
+                completedLoad.complete();
               } catch (error, stackTrace) {
                 _reportError('Posts data', error, stackTrace);
               }
@@ -115,38 +129,57 @@ class ApplicationState extends ChangeNotifier {
       _reportError('Firebase initialization', error, stackTrace);
     }
   }
-  // when a post is posted, call this method after setting up the Post object
-  void writePost(Post post){
-    final postDoc = FirebaseFirestore.instance
-    .collection('posts')
-    .doc(post.id);
-    postDoc.set({
-      'user': post.user,
-      'timeStamp': post.timeStamp,
-      'parentID': post.parentID,
-      'likes': post.likeCount,
-      'layers': [for (ScribbleLayer layer in post.canvas.layers){
-        {
-          'drawing': layer.drawing,
-          'height': layer.height,
-          'palette': layer.palette.key,
-          'width': layer.width,
-        }
-      } ]
-    }, SetOptions(merge: true));
+
+  Future<void> createPost(ScribbleCanvas canvas) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw StateError('You must be signed in to post.');
+    }
+
+    final postRef = FirebaseFirestore.instance.collection('posts').doc();
+    final post = Post(
+      id: postRef.id,
+      parentID: '',
+      timeStamp: DateTime.now().millisecondsSinceEpoch,
+      canvas: canvas,
+      user: user.uid,
+      likeCount: 0,
+    );
+
+    await writePost(post);
+  }
+
+  Future<void> writePost(Post post) async {
+    final postDoc = FirebaseFirestore.instance.collection('posts').doc(post.id);
+    try {
+      await postDoc.set({
+        'user': post.user,
+        'timeStamp': post.timeStamp,
+        'parentID': post.parentID,
+        'layers': [
+          for (final layer in post.canvas.layers)
+            {
+              'drawing': layer.drawing,
+              'height': layer.height,
+              'palette': layer.palette.key,
+              'width': layer.width,
+            },
+        ],
+      });
+    } catch (error, stackTrace) {
+      _reportError('Saving post', error, stackTrace);
+      rethrow;
+    }
   }
 
   // id should be that of the current user, immutable
   // username can be changed freely
   // pfp is the ID of the post displayed as a profile picture (not sure if we will implement this in time)
-  void writeProfile(String username, String pfp){
+  void writeProfile(String username, String pfp) {
     final profileDoc = FirebaseFirestore.instance
-    .collection('profiles')
-    .doc(FirebaseAuth.instance.currentUser!.uid);
-    profileDoc.set({
-      'Username': username,
-      'pfp': pfp,
-    }, SetOptions(merge: true));
+        .collection('profiles')
+        .doc(FirebaseAuth.instance.currentUser!.uid);
+    profileDoc.set({'Username': username, 'pfp': pfp}, SetOptions(merge: true));
   }
 
   void clearError() {

@@ -15,19 +15,7 @@ late ScribbleLayer layer;
 late ColorPalette palette;
 
 void main() {
-  palette = ColorPalette(key: "lukespeer");
-  canvas = ScribbleCanvas(palette, 1024, 1024);
-  runApp(CanvasTest());
-}
-
-class CanvasTest extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: CanvasScreen(canvas: canvas, palette: palette),
-      theme: ThemeData.dark(),
-    );
-  }
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {

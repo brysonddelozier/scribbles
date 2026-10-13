@@ -1,39 +1,59 @@
 import 'package:scribbles/objects/post.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:scribbles/screens/canvas_screen.dart';
 
 class PostWidget extends StatelessWidget {
-  int? id;
-  int? parentID;
-  int? numLikes = 0;
   String image = 'assets/duck.png';
+  Post post;
 
-  PostWidget({super.key, this.id, this.parentID, this.numLikes, required this.image});
+  PostWidget({super.key, required this.post});
 
-  BoxDecoration boxDecoration() {
+  BoxDecoration widgetDecoration() {
     return BoxDecoration(
-      border: Border.all(
-        width: 1,
-        color: Colors.grey.shade200,
+      border: Border(
+        bottom: BorderSide(width: 1, color: Colors.grey.shade200),
       ),
+    );
+  }
+
+  BoxDecoration imageDecoration() {
+    return BoxDecoration(
+      border: Border.all(width: 1, color: Colors.grey.shade200),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: boxDecoration(),
+      decoration: widgetDecoration(),
       child: Column(
         children: [
+          SizedBox(height: 20),
           Container(
-            decoration: boxDecoration(),
-            child: Image.asset(image),
+            decoration: imageDecoration(),
+            child: CanvasWidget(canvas: post.canvas),
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.thumb_up),
-              Text(numLikes.toString()),
+              IconButton(
+                icon: const Icon(Icons.chat_outlined),
+                onPressed: () {
+                  //numReplies += 1;
+                }
+              ),
+              SizedBox(width: 10),
+              Text(/*numReplies.toString()*/ "0"),
+              SizedBox(width: 200),
+              IconButton(
+                icon: const Icon(Icons.thumb_up),
+                onPressed: () {
+                  post.likeCount += 1;
+                }
+              ),
+              SizedBox(width: 10),
+              Text(/*numLikes.toString()*/ "0"),
             ],
           ),
         ],
