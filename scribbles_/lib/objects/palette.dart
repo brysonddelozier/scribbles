@@ -8,7 +8,9 @@ class ColorPalette {
   final String key;
   final List<Color> colors;
 
-  ColorPalette({required this.key}) : colors = getHashColors(key);
+  // ignore: non_constant_identifier_names
+  ColorPalette({required this.key})
+    : colors = getHashColors(key);
 
   Map toMap() {
     return {'key': key};
