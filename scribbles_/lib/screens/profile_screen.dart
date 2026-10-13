@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:scribbles/objects/palette.dart';
 import 'package:scribbles/storage.dart';
+import 'package:scribbles/widgets/palette_widget.dart';
 
 import '../app_state.dart';
 
@@ -51,8 +53,11 @@ class ProfileScreen extends StatelessWidget {
                 },
               ),
             ),
-            TextField(onChanged: (s) => context.read<ApplicationState>().changeUsername(s),
-            controller: controller)
+            TextField(
+              onChanged: (s) => context.read<ApplicationState>().changeUsername(s),
+              controller: controller
+            ),
+            PaletteWidget(0, palette: ColorPalette(key: Storage.data.currentUsername() ?? "John Doe"), callback: (x) => ()),
           ],
         ),
       ),
