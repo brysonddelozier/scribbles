@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:scribbles/app_state.dart';
@@ -166,6 +167,7 @@ class _FeedScrollableWidgetState extends State<FeedScrollableWidget> {
     final posts = Storage.data.sortedPosts;
 
     return CustomScrollView(
+      scrollCacheExtent: ScrollCacheExtent.pixels(5000),
       slivers: <Widget>[
         SliverList(
           delegate: SliverChildBuilderDelegate((
