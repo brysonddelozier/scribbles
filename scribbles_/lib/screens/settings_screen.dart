@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:scribbles/widgets/palette_widget.dart';
+import 'package:scribbles/objects/palette.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -78,7 +80,18 @@ class AppearanceScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Appearance')),
 
-      body: const Center(child: Text('Appearance')),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: PaletteWidget(
+            palette: ColorPalette(key: 'scribbles'),
+            callback: (int index) {
+              // Handle the selected color index here.
+            },
+          ),
+        ),
+      ),
     );
   }
 }
