@@ -12,32 +12,34 @@ import 'package:provider/provider.dart';
 
 import '../authentication.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   ProfileScreen({super.key});
 
+  @override
+  State<StatefulWidget> createState() {
+    return _ProfileScreenState();
+  }
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
   TextEditingController? controller;
+  String name = "";
+
+  @override
+  void initState() {
+    name = Storage.data.currentUsername()!;
+    controller = TextEditingController(text: name);
+  }
 
   @override
   Widget build(BuildContext context) {
-    controller = TextEditingController(text: Storage.data.currentUsername());
-
     return Scaffold(
-            appBar: AppBar(
-        title: Row( 
+      appBar: AppBar(
+        title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              'Scribbles',
-              style: GoogleFonts.nanumPenScript(
-                fontSize: 50,
-              ),
-            ),
-            Text(
-              'Profile',
-              style: GoogleFonts.nanumPenScript(
-                fontSize: 50,
-              ),
-            ),
+            Text('Scribbles', style: GoogleFonts.nanumPenScript(fontSize: 50)),
+            Text('Profile', style: GoogleFonts.nanumPenScript(fontSize: 50)),
           ],
         ),
       ),
@@ -54,10 +56,21 @@ class ProfileScreen extends StatelessWidget {
               ),
             ),
             TextField(
-              onChanged: (s) => context.read<ApplicationState>().changeUsername(s),
-              controller: controller
+              onChanged: (s) {
+                context.read<ApplicationState>().changeUsername(s);
+                setState(() {
+                  name = s;
+                });
+              },
+              controller: controller,
             ),
-            PaletteWidget(0, palette: ColorPalette(key: Storage.data.currentUsername() ?? "John Doe"), callback: (x) => ()),
+            PaletteWidget(
+              0,
+              palette: ColorPalette(
+                key: Storage.data.currentUsername() ?? "John Doe",
+              ),
+              callback: (x) => {},
+            ),
           ],
         ),
       ),

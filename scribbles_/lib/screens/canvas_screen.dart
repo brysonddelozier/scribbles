@@ -12,8 +12,6 @@ import 'dart:ui' as ui;
 
 import 'package:scribbles/widgets/palette_widget.dart';
 
-// https://github.com/serverpod/pixels/blob/main/lib/src/pixel_image.dart
-
 class CanvasScreen extends StatefulWidget {
   final ScribbleCanvas canvas;
   final ColorPalette palette;
