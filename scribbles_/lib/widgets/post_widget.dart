@@ -105,7 +105,7 @@ class PostWidget extends StatelessWidget {
   Future<void> _onPost(BuildContext context, ScribbleCanvas canvas, String parentID) async {
     final appState = context.read<ApplicationState>();
     final NavigatorState navigator = Navigator.of(context);
-    appState.createPost(canvas);
+    appState.createPost(canvas, parentID);
     navigator.pop();
   }
 }
