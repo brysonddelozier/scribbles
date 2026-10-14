@@ -246,7 +246,7 @@ class _CanvasScreenState extends State<CanvasScreen> {
     if (!bitField[idx]) {
       bitField[idx] = true;
       widget.canvas.layer.setPixel(x, y, selectedColor);
-      widget.canvas.cache.setPixel(x, y, widget.palette.colors[selectedColor]);
+      widget.canvas.cache.setPixel(x, y, widget.canvas.getColor(x, y));
     }
   }
 
@@ -296,7 +296,6 @@ class _CanvasWidgetState extends State<CanvasWidget> {
     return FutureBuilder(
       future: _image,
       builder: (context, snapshot) {
-        print("state done? " + snapshot.connectionState.name);
         if (snapshot.hasError) {
           return const Center(child: Icon(Icons.error_outline_outlined));
         }
