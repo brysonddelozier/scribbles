@@ -28,6 +28,6 @@ Each user has an 8 color palette. While this might be seen as a limitation, it i
 
 Scribbles is under the MIT License. See [LICENSE](LICENSE) for more details.
 
-![Commit Graph](https://gitstock.org/brysonddelozier/scribbles/stock.svg)
+# Commits
 
-![Contributors](https://readme-contribs.as93.net/contributors/brysonddelozier/scribbles?perRow=4&title=Contributors&shape=circle&fontSize=15&outerBorderRadius=5&avatarSize=60)
+![Commit Graph](https://gitstock.org/brysonddelozier/scribbles/stock.svg)
