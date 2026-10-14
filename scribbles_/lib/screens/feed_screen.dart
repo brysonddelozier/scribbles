@@ -158,6 +158,7 @@ class _FeedScreenState extends State<FeedScreen> {
 }
 
 class FeedScrollableWidget extends StatefulWidget {
+  final posts = Storage.data.sortedPosts;
   @override
   State<StatefulWidget> createState() {
     return _FeedScrollableWidgetState();
@@ -167,7 +168,7 @@ class FeedScrollableWidget extends StatefulWidget {
 class _FeedScrollableWidgetState extends State<FeedScrollableWidget> {
   @override
   Widget build(BuildContext context) {
-    final posts = Storage.data.sortedPosts;
+    
 
     return CustomScrollView(
       scrollCacheExtent: ScrollCacheExtent.pixels(5000),
@@ -177,7 +178,7 @@ class _FeedScrollableWidgetState extends State<FeedScrollableWidget> {
             BuildContext context,
             int index,
           ) {
-            final post = posts[index];
+            final post = widget.posts[index];
             return Padding(
               padding: const EdgeInsets.symmetric(
                 vertical: 8.0,
@@ -185,7 +186,7 @@ class _FeedScrollableWidgetState extends State<FeedScrollableWidget> {
               ),
               child: PostWidget(post: post),
             );
-          }, childCount: posts.length),
+          }, childCount: widget.posts.length),
         ),
       ],
     );
