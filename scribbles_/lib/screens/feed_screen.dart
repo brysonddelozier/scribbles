@@ -13,7 +13,7 @@ import 'package:scribbles/widgets/post_widget.dart';
 import 'dart:math';
 
 class FeedScreen extends StatefulWidget {
-  const FeedScreen({super.key});
+  FeedScreen({super.key});
 
   @override
   State<FeedScreen> createState() => _FeedScreenState();
@@ -124,7 +124,9 @@ class _FeedScreenState extends State<FeedScreen> {
                     children: [
                       CanvasScreen(canvas: canvas, palette: palette),
                       FilledButton.icon(
-                        onPressed: () => _onPost(context, canvas),
+                        onPressed: () => {
+                          _onPost(context, canvas),
+                        },
                         icon: const Icon(Icons.upload),
                         label: const Text('Post'),
                       ),

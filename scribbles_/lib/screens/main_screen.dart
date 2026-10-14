@@ -14,7 +14,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
 
   final List<Widget> screens = [
-    const FeedScreen(),
+    FeedScreen(),
     ProfileScreen(),
     const SettingsScreen(),
   ];

@@ -79,7 +79,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Scribbles', style: GoogleFonts.nanumPenScript(fontSize: 50)),
+            Image.asset(
+              'assets/Scribbles_Logo.png',
+              height: 100,
+            ),
             Text('Profile', style: GoogleFonts.nanumPenScript(fontSize: 50)),
           ],
         ),
