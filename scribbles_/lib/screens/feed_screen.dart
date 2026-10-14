@@ -21,7 +21,6 @@ class FeedScreen extends StatefulWidget {
 
 class _FeedScreenState extends State<FeedScreen> {
   Future<void> _futurePosts = Future.value();
-  int _buttonColor = Storage.data.currentButtonColor() ?? 0xFFEB585A;
 
   @override
   void initState() {
@@ -36,6 +35,7 @@ class _FeedScreenState extends State<FeedScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final buttonColor = Storage.data.currentButtonColor() ?? 0xFFEB585A;
     Provider.of<ApplicationState>(context, listen: false).callback = () {
       setState(() {});
     };
@@ -75,7 +75,7 @@ class _FeedScreenState extends State<FeedScreen> {
         //appBar: AppBar(title: const Text('Feed')),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: Color(_buttonColor),
+        backgroundColor: Color(buttonColor),
         onPressed: () {
           /*showDialog(
             context: context,
@@ -131,6 +131,10 @@ class _FeedScreenState extends State<FeedScreen> {
                         },
                         icon: const Icon(Icons.upload),
                         label: const Text('Post'),
+                        style: FilledButton.styleFrom(
+                          backgroundColor: Color(buttonColor),
+                          foregroundColor: Colors.white,
+                        ),
                       ),
                       Positioned(
                         bottom: 20,
@@ -139,6 +143,10 @@ class _FeedScreenState extends State<FeedScreen> {
                             Navigator.of(context).pop();
                           },
                           child: const Text('Back'),
+                          style: FilledButton.styleFrom(
+                            backgroundColor: Color(buttonColor),
+                            foregroundColor: Colors.white,
+                          ),
                         ),
                       ),
                     ],
