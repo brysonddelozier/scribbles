@@ -60,7 +60,7 @@ class _FeedScreenState extends State<FeedScreen> {
                   );
                 }
 
-                return FeedScrollableWidget();
+                return const FeedScrollableWidget();
               } else {
                 return CircularProgressIndicator();
               }
@@ -157,21 +157,18 @@ class _FeedScreenState extends State<FeedScreen> {
   }
 }
 
-enum PostFilter{
-  all,
-  liked,
-  parentID,
-}
-
-enum Sort{
-  recent,
-  likes,
-}
+enum PostFilter { all, liked, parentID }
 
 class FeedScrollableWidget extends StatefulWidget {
-  var filter;
-  var sort;
-  final posts = Storage.data.sortedPosts;
+  const FeedScrollableWidget({
+    super.key,
+    this.filter = PostFilter.all,
+    this.parentID,
+  });
+
+  final PostFilter filter;
+  final String? parentID;
+
   @override
   State<StatefulWidget> createState() {
     return _FeedScrollableWidgetState();
@@ -181,7 +178,15 @@ class FeedScrollableWidget extends StatefulWidget {
 class _FeedScrollableWidgetState extends State<FeedScrollableWidget> {
   @override
   Widget build(BuildContext context) {
-    
+    final posts = Storage.data.sortedPosts;
+    final appState = context.read<ApplicationState>();
+    final localPosts = switch (widget.filter) {
+      PostFilter.all => posts,
+      PostFilter.liked =>
+        posts.where((post) => appState.liked(post.id) ?? false).toList(),
+      PostFilter.parentID =>
+        posts.where((post) => post.parentID == widget.parentID).toList(),
+    };
 
     return CustomScrollView(
       scrollCacheExtent: ScrollCacheExtent.pixels(5000),
@@ -191,7 +196,7 @@ class _FeedScrollableWidgetState extends State<FeedScrollableWidget> {
             BuildContext context,
             int index,
           ) {
-            final post = widget.posts[index];
+            final post = localPosts[index];
             return Padding(
               padding: const EdgeInsets.symmetric(
                 vertical: 8.0,
@@ -199,7 +204,7 @@ class _FeedScrollableWidgetState extends State<FeedScrollableWidget> {
               ),
               child: PostWidget(post: post),
             );
-          }, childCount: widget.posts.length),
+          }, childCount: localPosts.length),
         ),
       ],
     );

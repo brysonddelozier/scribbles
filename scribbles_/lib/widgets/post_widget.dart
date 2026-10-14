@@ -3,6 +3,7 @@ import 'package:scribbles/objects/canvas.dart';
 import 'package:scribbles/objects/palette.dart';
 import 'package:scribbles/objects/post.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import 'package:scribbles/screens/canvas_screen.dart';
 import 'package:scribbles/storage.dart';
@@ -72,7 +73,8 @@ class PostWidget extends StatelessWidget {
                             children: [
                               CanvasScreen(canvas: canvas, palette: palette),
                               FilledButton.icon(
-                                onPressed: () => _onPost(context, canvas, post.id),
+                                onPressed: () =>
+                                    _onPost(context, canvas, post.id),
                                 icon: const Icon(Icons.upload),
                                 label: const Text('Post'),
                               ),
@@ -89,8 +91,19 @@ class PostWidget extends StatelessWidget {
               SizedBox(width: 200),
               IconButton(
                 icon: const Icon(Icons.thumb_up),
-                onPressed: () {
-                  context.read<ApplicationState>().addLike(post.id);
+                onPressed: () async {
+                  try {
+                    await context.read<ApplicationState>().addLike(post.id);
+                  } on FirebaseException catch (error) {
+                    if (!context.mounted) return;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(error.message ?? error.code)),
+                    );
+                  } on StateError catch (error) {
+                    if (!context.mounted) return;
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(SnackBar(content: Text(error.message)));
+                  }
                 },
               ),
               SizedBox(width: 10),
@@ -102,7 +115,11 @@ class PostWidget extends StatelessWidget {
     );
   }
 
-  Future<void> _onPost(BuildContext context, ScribbleCanvas canvas, String parentID) async {
+  Future<void> _onPost(
+    BuildContext context,
+    ScribbleCanvas canvas,
+    String parentID,
+  ) async {
     final appState = context.read<ApplicationState>();
     final NavigatorState navigator = Navigator.of(context);
     appState.createPost(canvas, parentID);

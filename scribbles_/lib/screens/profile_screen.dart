@@ -22,13 +22,53 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  TextEditingController? controller;
+  late final TextEditingController controller;
   String name = "";
+  ApplicationState? _applicationState;
+  bool _isEditingUsername = false;
 
   @override
   void initState() {
-    name = Storage.data.currentUsername()!;
+    super.initState();
+    name = Storage.data.currentUsername() ?? "John Doe";
     controller = TextEditingController(text: name);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final appState = context.read<ApplicationState>();
+    if (_applicationState != appState) {
+      _applicationState?.removeListener(_syncUsernameFromProfile);
+      _applicationState = appState;
+      appState.addListener(_syncUsernameFromProfile);
+      _syncUsernameFromProfile();
+    }
+  }
+
+  @override
+  void dispose() {
+    _applicationState?.removeListener(_syncUsernameFromProfile);
+    controller.dispose();
+    super.dispose();
+  }
+
+  void _syncUsernameFromProfile() {
+    final username = Storage.data.currentUsername();
+    if (!mounted ||
+        _isEditingUsername ||
+        username == null ||
+        username == name) {
+      return;
+    }
+
+    setState(() {
+      name = username;
+      controller.value = TextEditingValue(
+        text: username,
+        selection: TextSelection.collapsed(offset: username.length),
+      );
+    });
   }
 
   @override
@@ -57,6 +97,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             TextField(
               onChanged: (s) {
+                _isEditingUsername = true;
                 context.read<ApplicationState>().changeUsername(s);
                 setState(() {
                   name = s;
@@ -66,11 +107,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             PaletteWidget(
               0,
-              palette: ColorPalette(
-                key: Storage.data.currentUsername() ?? "John Doe",
-              ),
+              palette: ColorPalette(key: name),
               callback: (x) => {},
             ),
+            //Expanded(child: FeedScrollableWidget(filter: PostFilter.liked)),
           ],
         ),
       ),

@@ -69,8 +69,10 @@ class ApplicationState extends ChangeNotifier {
                 for (final document in snapshot.docs) {
                   final data = document.data();
                   tempData[document.id] = ScribbleUser(
-                    username: data['Username'],
-                    likedPosts: data['likes'],
+                    username: data['Username'] as String? ?? 'John Doe',
+                    likedPosts: List<String>.from(
+                      data['likes'] as List<dynamic>? ?? const [],
+                    ),
                   );
                 }
                 Storage.data.profiles = tempData;
@@ -224,13 +226,21 @@ class ApplicationState extends ChangeNotifier {
           .update({'Username': newUsername ?? 'John Doe'});
   }
 
-  Future<void> addLike(String postID) async{
+  Future<void> addLike(String postID) async {
     final userID = FirebaseAuth.instance.currentUser?.uid;
+    if (userID == null) {
+      throw StateError('You must be signed in to like a post.');
+    }
 
     await FirebaseFirestore.instance
-    .collection('profiles')
-    .doc(userID)
-    .update({'likes': Storage.data.profiles[Storage.data.currentUserID]?.likedPosts});
+        .collection('profiles')
+        .doc(userID)
+        .update({
+          'likes': FieldValue.arrayUnion([postID]),
+        });
   }
 
+  bool? liked(String postID) {
+    return Storage.data.profiles[Storage.data.currentUserID]?.likedPosts.contains(postID);
+  }
 }
