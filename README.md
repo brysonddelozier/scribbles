@@ -1,5 +1,7 @@
 # Scribbles
 
+![Scribbles Logo](scribbles_/assets/Scribbles_Logo.png)
+
 A social media app based on the idea of small drawings.
 
 ## Why?
