@@ -73,7 +73,7 @@ class ApplicationState extends ChangeNotifier {
                     likedPosts: List<String>.from(
                       data['likes'] as List<dynamic>? ?? const [],
                     ),
-                    buttonColor: data['ButtonColor'] as String ?? '0xFFEB585A',
+                    buttonColor: data['ButtonColor'] as int ?? 0xFFEB585A,
                   );
                 }
                 Storage.data.profiles = tempData;
@@ -182,7 +182,7 @@ class ApplicationState extends ChangeNotifier {
   // id should be that of the current user, immutable
   // username can be changed freely
   // pfp is the ID of the post displayed as a profile picture (not sure if we will implement this in time)
-  void writeProfile(String username, String pfp, List<String> likes, String buttonColor) {
+  void writeProfile(String username, String pfp, List<String> likes, int buttonColor) {
     final profileDoc = FirebaseFirestore.instance
         .collection('profiles')
         .doc(FirebaseAuth.instance.currentUser!.uid);
@@ -246,12 +246,12 @@ class ApplicationState extends ChangeNotifier {
     return Storage.data.profiles[Storage.data.currentUserID]?.likedPosts.contains(postID);
   }
 
-  Future<void> changeButtonColor(String? newButtonColor) async {
+  Future<void> changeButtonColor(int? newButtonColor) async {
     final userID = FirebaseAuth.instance.currentUser?.uid;
 
       await FirebaseFirestore.instance
           .collection('profiles')
           .doc(userID)
-          .update({'ButtonColor': newButtonColor ?? '0xFFEB585A'});
+          .update({'ButtonColor': newButtonColor ?? 0xFFEB585A});
   }
 }

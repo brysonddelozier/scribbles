@@ -40,7 +40,7 @@ class DataHolder{
     return profiles[currentUserID]?.username;
   }
 
-  String? currentButtonColor(){
+  int? currentButtonColor(){
     return profiles[currentUserID]?.buttonColor;
   }
   

@@ -23,13 +23,13 @@ class _SettingsScreenState extends State<StatefulWidget> {
   late final TextEditingController controller;
   String name = "";
   ApplicationState? _applicationState;
-  String buttonColor = "";
+  int buttonColor = 0;
 
   @override
   void initState() {
     super.initState();
     name = Storage.data.currentUsername() ?? "John Doe";
-    buttonColor = Storage.data.currentButtonColor() ?? "0xFFEB585A";
+    buttonColor = Storage.data.currentButtonColor() ?? 0xFFEB585A;
   }
 
   @override
@@ -65,7 +65,10 @@ class _SettingsScreenState extends State<StatefulWidget> {
             PaletteWidget(
               0,
               palette: ColorPalette(key: name),
-              callback: (x) => {},
+              callback: (x) async {
+                final color = ColorPalette(key: name).colors[x];
+                await context.read<ApplicationState>().changeButtonColor(color.value);
+              },
             ),
           ],
         ),

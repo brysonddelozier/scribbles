@@ -21,7 +21,7 @@ class FeedScreen extends StatefulWidget {
 
 class _FeedScreenState extends State<FeedScreen> {
   Future<void> _futurePosts = Future.value();
-  String _buttonColor = Storage.data.currentButtonColor() ?? '0xFFEB585A';
+  int _buttonColor = Storage.data.currentButtonColor() ?? 0xFFEB585A;
 
   @override
   void initState() {
@@ -75,7 +75,7 @@ class _FeedScreenState extends State<FeedScreen> {
         //appBar: AppBar(title: const Text('Feed')),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: Color(int.parse(_buttonColor)),
+        backgroundColor: Color(_buttonColor),
         onPressed: () {
           /*showDialog(
             context: context,
