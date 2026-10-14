@@ -1,7 +1,13 @@
+import 'dart:nativewrappers/_internal/vm/lib/math_patch.dart';
+
+import 'package:scribbles/app_state.dart';
+import 'package:scribbles/objects/canvas.dart';
+import 'package:scribbles/objects/palette.dart';
 import 'package:scribbles/objects/post.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribbles/screens/canvas_screen.dart';
+import 'package:scribbles/storage.dart';
 
 class PostWidget extends StatelessWidget {
   String image = 'assets/duck.png';
@@ -11,9 +17,7 @@ class PostWidget extends StatelessWidget {
 
   BoxDecoration widgetDecoration() {
     return BoxDecoration(
-      border: Border(
-        bottom: BorderSide(width: 1, color: Colors.grey.shade200),
-      ),
+      border: Border(bottom: BorderSide(width: 1, color: Colors.grey.shade200)),
     );
   }
 
@@ -40,8 +44,45 @@ class PostWidget extends StatelessWidget {
               IconButton(
                 icon: const Icon(Icons.chat_outlined),
                 onPressed: () {
-                  //numReplies += 1;
-                }
+                  showDialog(
+                    context: context,
+                    useSafeArea: true,
+                    builder: (context) {
+                      ColorPalette palette = ColorPalette(
+                        key: (Storage.data.currentUsername() ?? 'John Doe'),
+                      );
+                      ScribbleCanvas canvas = ScribbleCanvas.withLayers(
+                        layers: post.canvas.layers,
+                        palette: palette,
+                      );
+
+                      // Get the device screen size to make the dialog responsive
+                      final screenSize = MediaQuery.of(context).size;
+                      final dialogSize = min(
+                        screenSize.width * 0.85,
+                        screenSize.height * 0.85,
+                      );
+
+                      return Dialog(
+                        // Prevents the background alert container from expanding infinitely
+                        child: SizedBox(
+                          width: screenSize.width,
+                          height: screenSize.height,
+                          child: Stack(
+                            children: [
+                              CanvasScreen(canvas: canvas, palette: palette),
+                              FilledButton.icon(
+                                onPressed: () => _onPost(context, canvas),
+                                icon: const Icon(Icons.upload),
+                                label: const Text('Post'),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
               ),
               SizedBox(width: 10),
               Text(/*numReplies.toString()*/ "0"),
@@ -50,7 +91,7 @@ class PostWidget extends StatelessWidget {
                 icon: const Icon(Icons.thumb_up),
                 onPressed: () {
                   post.likeCount += 1;
-                }
+                },
               ),
               SizedBox(width: 10),
               Text(/*numLikes.toString()*/ "0"),
@@ -59,5 +100,12 @@ class PostWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<void> _onPost(BuildContext context, ScribbleCanvas canvas) async {
+    final appState = context.read<ApplicationState>();
+    final NavigatorState navigator = Navigator.of(context);
+    appState.createPost(canvas);
+    navigator.pop();
   }
 }
