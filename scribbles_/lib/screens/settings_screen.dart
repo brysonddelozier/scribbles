@@ -119,19 +119,29 @@ class PrivacyScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('About')),
-      body: const Center(child: Text('Scribbles DEMO VERSION.')),
-      bottomNavigationBar: BottomAppBar(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.pop(context);
-              },
+      body: Column(
+        children: [
+          OutlinedButton(
+            onPressed: () {
+              // Handle privacy policy button press
+            },
+            child: const Text('Privacy Policy'),
+          ),
+          Expanded(
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              color: const Color.fromARGB(255, 77, 63, 63),
+              child: const Center(child: Text('Scribbles DEMO VERSION.')),
             ),
-            const Text('Powered by Flutter', style: TextStyle(fontSize: 16)),
-            const SizedBox(width: 48), // Placeholder for alignment
+          ),
+        ],
+      ),
+      bottomNavigationBar: BottomAppBar(
+        child: const Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Powered by Flutter', style: TextStyle(fontSize: 16)),
+            SizedBox(width: 48), // Placeholder for alignment
           ],
         ),
       ),
