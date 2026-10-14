@@ -79,10 +79,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Image.asset(
-              'assets/Scribbles_Logo.png',
-              height: 100,
-            ),
+            Image.asset('assets/Scribbles_Logo.png', height: 100),
             Text('Profile', style: GoogleFonts.nanumPenScript(fontSize: 50)),
           ],
         ),
@@ -95,6 +92,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 Consumer<ApplicationState>(
                   builder: (context, appState, _) => AuthFunc(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     loggedIn: appState.loggedIn,
                     signOut: () {
                       FirebaseAuth.instance.signOut();
@@ -120,7 +118,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
             PaletteWidget(
               0,
               palette: ColorPalette(key: name),
-              callback: (x) => {},
+              callback: (x) => {
+                context.read<ApplicationState>().changeButtonColor(
+                  ColorPalette(key: name).colors[x].toARGB32(),
+                ),
+              },
             ),
             Expanded(child: FeedScrollableWidget(filter: PostFilter.liked)),
           ],
