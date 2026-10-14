@@ -130,6 +130,15 @@ class _FeedScreenState extends State<FeedScreen> {
                         icon: const Icon(Icons.upload),
                         label: const Text('Post'),
                       ),
+                      Positioned(
+                        bottom: 20,
+                        child: FilledButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('Back'),
+                        ),
+                      ),
                     ],
                   ),
                 ),
