@@ -39,6 +39,7 @@ class PostWidget extends StatelessWidget {
             decoration: imageDecoration(),
             child: CanvasWidget(canvas: post.canvas),
           ),
+          Text(Storage.data.profiles[post.user]?.username??"Unknown", style: TextStyle(fontSize: 18)),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
