@@ -1,14 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:scribbles/screens/main_screen.dart';
+import 'package:scribbles/objects/palette.dart';
+import 'package:scribbles/widgets/palette_widget.dart';
+import 'package:scribbles/storage.dart';
+import '../app_state.dart';
+import 'package:firebase_auth/firebase_auth.dart'
+    hide EmailAuthProvider, PhoneAuthProvider;
+import 'package:provider/provider.dart';
+import '../authentication.dart';
 
-class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({super.key});
+class SettingsScreen extends StatefulWidget {
+  SettingsScreen({super.key});
+
+  @override
+  State<StatefulWidget> createState() {
+    return _SettingsScreenState();
+  }
+}
+
+class _SettingsScreenState extends State<StatefulWidget> {
+  late final TextEditingController controller;
+  String name = "";
+  ApplicationState? _applicationState;
+
+  @override
+  void initState() {
+    super.initState();
+    name = Storage.data.currentUsername() ?? "John Doe";
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-            appBar: AppBar(
+      appBar: AppBar(
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -26,7 +51,22 @@ class SettingsScreen extends StatelessWidget {
         ),
       ),
       body: Center(
-        child: const Text("This is the body of settings"),
+        child: Column(
+          children: [
+            SizedBox(height: 40),
+            Text(
+              "Select a color for buttons and highlights!",
+              style: TextStyle(
+                fontSize: 20,
+              ),
+            ),
+            PaletteWidget(
+              0,
+              palette: ColorPalette(key: name),
+              callback: (x) => {},
+            ),
+          ],
+        ),
       ),
     );  
   }
