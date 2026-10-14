@@ -1,5 +1,3 @@
-import 'dart:nativewrappers/_internal/vm/lib/math_patch.dart';
-
 import 'package:scribbles/app_state.dart';
 import 'package:scribbles/objects/canvas.dart';
 import 'package:scribbles/objects/palette.dart';
@@ -8,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribbles/screens/canvas_screen.dart';
 import 'package:scribbles/storage.dart';
+
+import 'dart:math';
 
 class PostWidget extends StatelessWidget {
   String image = 'assets/duck.png';
