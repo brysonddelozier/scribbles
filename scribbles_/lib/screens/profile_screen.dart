@@ -22,8 +22,8 @@ class ProfileScreen extends StatelessWidget {
               Image.asset('assets/Scribbles_Logo.png', width: 200, height: 200),
               const SizedBox(height: 24),
               const CircleAvatar(
-                backgroundImage: AssetImage('images/pic.jpg'),
                 radius: 80,
+
                 child: Icon(Icons.person, size: 80),
               ),
               const SizedBox(height: 18),

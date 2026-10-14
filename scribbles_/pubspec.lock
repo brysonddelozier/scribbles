@@ -57,6 +57,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.13.1"
+  bit_array:
+    dependency: "direct main"
+    description:
+      name: bit_array
+      sha256: "1d7a488b29446431a586681c157db901434b5de7dbbe14db271b91ea3eabfbac"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.0"
   boolean_selector:
     dependency: transitive
     description:

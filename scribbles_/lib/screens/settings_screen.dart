@@ -88,7 +88,7 @@ class AppearanceScreen extends StatelessWidget {
                   const Text('Color Palette', style: TextStyle(fontSize: 18)),
                   const ListTile(
                     contentPadding: EdgeInsets.zero,
-                    title: Text('Palette based on your username'),
+                    title: Text('Make your own style!'),
                     subtitle: Text(
                       'These are the colors available for customization.',
                     ),
