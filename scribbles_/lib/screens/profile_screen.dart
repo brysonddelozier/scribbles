@@ -87,7 +87,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: Center(
         child: Column(
           children: [
-            const Text("This is the body of profile"),
             Consumer<ApplicationState>(
               builder: (context, appState, _) => AuthFunc(
                 loggedIn: appState.loggedIn,
