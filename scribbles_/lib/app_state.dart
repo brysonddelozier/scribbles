@@ -134,7 +134,7 @@ class ApplicationState extends ChangeNotifier {
     }
   }
 
-  Future<void> createPost(ScribbleCanvas canvas) async {
+  Future<void> createPost(ScribbleCanvas canvas, String parentID) async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       throw StateError('You must be signed in to post.');
@@ -143,7 +143,7 @@ class ApplicationState extends ChangeNotifier {
     final postRef = FirebaseFirestore.instance.collection('posts').doc();
     final post = Post(
       id: postRef.id,
-      parentID: '',
+      parentID: parentID,
       timeStamp: DateTime.now().millisecondsSinceEpoch,
       canvas: canvas,
       user: user.uid,

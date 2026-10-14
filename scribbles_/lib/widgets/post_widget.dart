@@ -72,7 +72,7 @@ class PostWidget extends StatelessWidget {
                             children: [
                               CanvasScreen(canvas: canvas, palette: palette),
                               FilledButton.icon(
-                                onPressed: () => _onPost(context, canvas),
+                                onPressed: () => _onPost(context, canvas, post.id),
                                 icon: const Icon(Icons.upload),
                                 label: const Text('Post'),
                               ),
@@ -102,10 +102,10 @@ class PostWidget extends StatelessWidget {
     );
   }
 
-  Future<void> _onPost(BuildContext context, ScribbleCanvas canvas) async {
+  Future<void> _onPost(BuildContext context, ScribbleCanvas canvas, String parentID) async {
     final appState = context.read<ApplicationState>();
     final NavigatorState navigator = Navigator.of(context);
-    appState.createPost(canvas);
+    appState.createPost(canvas, parentID);
     navigator.pop();
   }
 }

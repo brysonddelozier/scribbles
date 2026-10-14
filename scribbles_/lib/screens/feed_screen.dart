@@ -152,7 +152,7 @@ class _FeedScreenState extends State<FeedScreen> {
   Future<void> _onPost(BuildContext context, ScribbleCanvas canvas) async {
     final appState = context.read<ApplicationState>();
     final NavigatorState navigator = Navigator.of(context);
-    appState.createPost(canvas);
+    appState.createPost(canvas, 'original');
     navigator.pop();
   }
 }
