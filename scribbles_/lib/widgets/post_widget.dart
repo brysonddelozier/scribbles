@@ -43,7 +43,7 @@ class PostWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               IconButton(
-                icon: const Icon(Icons.chat_outlined),
+                icon: const Icon(Icons.refresh_outlined),
                 onPressed: () {
                   showDialog(
                     context: context,
@@ -87,10 +87,10 @@ class PostWidget extends StatelessWidget {
                 },
               ),
               SizedBox(width: 10),
-              Text(/*numReplies.toString()*/ "0"),
+              //Text(/*numReplies.toString()*/ "0"),
               SizedBox(width: 200),
               IconButton(
-                icon: const Icon(Icons.thumb_up),
+                icon: Icon(Icons.thumb_up, color: context.read<ApplicationState>().liked(post.id)??false ? Colors.red : Colors.white),
                 onPressed: () async {
                   try {
                     await context.read<ApplicationState>().addLike(post.id);
@@ -106,8 +106,8 @@ class PostWidget extends StatelessWidget {
                   }
                 },
               ),
+              //Text(/* like count */)
               SizedBox(width: 10),
-              Text(/*numLikes.toString()*/ "0"),
             ],
           ),
         ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:scribbles/objects/palette.dart';
+import 'package:scribbles/screens/feed_screen.dart';
 import 'package:scribbles/storage.dart';
 import 'package:scribbles/widgets/palette_widget.dart';
 
@@ -110,7 +111,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               palette: ColorPalette(key: name),
               callback: (x) => {},
             ),
-            //Expanded(child: FeedScrollableWidget(filter: PostFilter.liked)),
+            Expanded(child: FeedScrollableWidget(filter: PostFilter.liked)),
           ],
         ),
       ),
