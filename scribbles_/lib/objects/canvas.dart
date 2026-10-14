@@ -72,10 +72,10 @@ class MergedLayer {
 
   void setPixel(int x, int y, Color color) {
     int pos = ((y * width) + x) * 4;
-    colors[pos] = color.red;
-    colors[pos + 1] = color.green;
-    colors[pos + 2] = color.blue;
-    colors[pos + 3] = color.alpha;
+    colors[pos] = (color.r * 255.0).round().clamp(0, 255);
+    colors[pos + 1] = (color.g * 255.0).round().clamp(0, 255);
+    colors[pos + 2] = (color.b * 255.0).round().clamp(0, 255);
+    colors[pos + 3] = (color.a * 255.0).round().clamp(0, 255);
   }
 
   Color getPixel(int x, int y) {
@@ -112,24 +112,43 @@ class ScribbleCanvas {
     layers.add(layer);
   }
 
-  Color getColor(int x, int y) {
-    ScribbleLayer bottom = layers[0];
-    Color color = bottom.getPixel(x, y);
-    double r = color.r, g = color.g, b = color.b;
+  ScribbleCanvas.fromLayers({
+    required this.layers,
+    required this.palette,
+    int width = 256,
+    int height = 256,
+  }) : layer = ScribbleLayer(palette: palette, width: width, height: height),
+       cache = MergedLayer(width: width, height: height);
 
-    for (int i = 1; i < layers.length; i++) {
+  Color getColor(int x, int y) {
+    double r = 1;
+    double g = 1;
+    double b = 1;
+
+    bool first = true;
+    int layerCount = layers.length;
+
+    for (int i = 0; i < layers.length; i++) {
       int palleteIdx = layers[i].getPixelIndex(x, y);
 
       // treat white as transparent.
       if (palleteIdx == 0) continue;
-      Color col = palette.colors[palleteIdx];
+      Color col = layers[i].palette.colors[palleteIdx];
 
-      r = (col.r + r) * 0.5;
-      g = (col.g + g) * 0.5;
-      b = (col.b + b) * 0.5;
+      if (first) {
+        r = col.r;
+        g = col.g;
+        b = col.b;
+      } else {
+        r = (r + col.r) * (i / layerCount);
+        g = (g + col.g) * (i / layerCount);
+        b = (b + col.b) * (i / layerCount);
+      }
+
+      first = false;
     }
 
-    return Color.from(alpha: 1.0, red: r, green: g, blue: b);
+    return Color.from(alpha: 1.0, red: r.clamp(0, 1), green: g.clamp(0, 1), blue: b.clamp(0, 1));
   }
 
   void addLayer(ScribbleLayer layer) {

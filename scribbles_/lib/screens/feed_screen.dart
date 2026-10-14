@@ -169,8 +169,6 @@ class _FeedScrollableWidgetState extends State<FeedScrollableWidget> {
   Widget build(BuildContext context) {
     final posts = Storage.data.sortedPosts;
 
-    print("rebuilding!");
-
     return CustomScrollView(
       scrollCacheExtent: ScrollCacheExtent.pixels(5000),
       slivers: <Widget>[
