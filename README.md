@@ -12,13 +12,13 @@ Pull Requests and Issues are welcome!
 
 ## Resources
 
-![Flutter](https://docs.flutter.dev/)  
-![Dart](https://dart.dev/docs)  
-![Firestore](https://firebase.google.com/docs/firestore)  
-![Image Rendering/Conversion](https://github.com/serverpod/pixels/blob/main/lib/src/pixel_image.dart)  
-![Unit Tests](https://www.manning.com/books/unit-testing)  
-![Philosophy of Software Design](https://www.youtube.com/watch?v=ybvn9Ux_wTI&t=10s)  
-![Line Rendering](https://www.youtube.com/watch?v=QdUkZBvfczA&t=890s)  
+[Flutter](https://docs.flutter.dev/)  
+[Dart](https://dart.dev/docs)  
+[Firestore](https://firebase.google.com/docs/firestore)  
+[Image Rendering/Conversion](https://github.com/serverpod/pixels/blob/main/lib/src/pixel_image.dart)  
+[Unit Tests](https://www.manning.com/books/unit-testing)  
+[Philosophy of Software Design](https://www.youtube.com/watch?v=ybvn9Ux_wTI&t=10s)  
+[Line Rendering](https://www.youtube.com/watch?v=QdUkZBvfczA&t=890s)  
 
 ## Choices
 
