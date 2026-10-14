@@ -23,11 +23,13 @@ class _SettingsScreenState extends State<StatefulWidget> {
   late final TextEditingController controller;
   String name = "";
   ApplicationState? _applicationState;
+  String buttonColor = "";
 
   @override
   void initState() {
     super.initState();
     name = Storage.data.currentUsername() ?? "John Doe";
+    buttonColor = Storage.data.currentButtonColor() ?? "0xFFEB585A";
   }
 
   @override

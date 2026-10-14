@@ -39,6 +39,10 @@ class DataHolder{
   String? currentUsername(){
     return profiles[currentUserID]?.username;
   }
+
+  String? currentButtonColor(){
+    return profiles[currentUserID]?.buttonColor;
+  }
   
 
   DataHolder():profiles = Map(), posts = Map(), loggedIn = false, _sortedPosts = [];
