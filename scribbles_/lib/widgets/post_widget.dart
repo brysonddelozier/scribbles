@@ -90,7 +90,7 @@ class PostWidget extends StatelessWidget {
               IconButton(
                 icon: const Icon(Icons.thumb_up),
                 onPressed: () {
-                  post.likeCount += 1;
+                  context.read<ApplicationState>().addLike(post.id);
                 },
               ),
               SizedBox(width: 10),

@@ -157,7 +157,20 @@ class _FeedScreenState extends State<FeedScreen> {
   }
 }
 
+enum PostFilter{
+  all,
+  liked,
+  parentID,
+}
+
+enum Sort{
+  recent,
+  likes,
+}
+
 class FeedScrollableWidget extends StatefulWidget {
+  var filter;
+  var sort;
   final posts = Storage.data.sortedPosts;
   @override
   State<StatefulWidget> createState() {

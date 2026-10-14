@@ -70,6 +70,7 @@ class ApplicationState extends ChangeNotifier {
                   final data = document.data();
                   tempData[document.id] = ScribbleUser(
                     username: data['Username'],
+                    likedPosts: data['likes'],
                   );
                 }
                 Storage.data.profiles = tempData;
@@ -120,7 +121,6 @@ class ApplicationState extends ChangeNotifier {
 
                 if (!completedLoad.isCompleted) completedLoad.complete();
                 if (callback != null) callback!();
-
               } catch (error, stackTrace) {
                 _reportError('Posts data', error, stackTrace);
               }
@@ -179,11 +179,15 @@ class ApplicationState extends ChangeNotifier {
   // id should be that of the current user, immutable
   // username can be changed freely
   // pfp is the ID of the post displayed as a profile picture (not sure if we will implement this in time)
-  void writeProfile(String username, String pfp) {
+  void writeProfile(String username, String pfp, List<String> likes) {
     final profileDoc = FirebaseFirestore.instance
         .collection('profiles')
         .doc(FirebaseAuth.instance.currentUser!.uid);
-    profileDoc.set({'Username': username, 'pfp': pfp}, SetOptions(merge: true));
+    profileDoc.set({
+      'Username': username,
+      'pfp': pfp,
+      'likes': likes,
+    }, SetOptions(merge: true));
   }
 
   void clearError() {
@@ -211,7 +215,22 @@ class ApplicationState extends ChangeNotifier {
     super.dispose();
   }
 
-  void changeUsername(String? newUsername) {
-    writeProfile(newUsername ?? "John Doe", '');
+  Future<void> changeUsername(String? newUsername) async {
+    final userID = FirebaseAuth.instance.currentUser?.uid;
+
+      await FirebaseFirestore.instance
+          .collection('profiles')
+          .doc(userID)
+          .update({'Username': newUsername ?? 'John Doe'});
   }
+
+  Future<void> addLike(String postID) async{
+    final userID = FirebaseAuth.instance.currentUser?.uid;
+
+    await FirebaseFirestore.instance
+    .collection('profiles')
+    .doc(userID)
+    .update({'likes': Storage.data.profiles[Storage.data.currentUserID]?.likedPosts});
+  }
+
 }
