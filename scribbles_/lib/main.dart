@@ -27,7 +27,11 @@ class MyApp extends StatelessWidget {
       create: (_) => ApplicationState(),
       child: MaterialApp.router(
         title: 'Scribbles',
-        theme: ThemeData.dark(),
+        theme: ThemeData.dark().copyWith(
+          colorScheme: ThemeData.dark().colorScheme.copyWith(
+            primary: Colors.pinkAccent,
+          )
+        ),
         routerConfig: _router, // new
       ),
     );

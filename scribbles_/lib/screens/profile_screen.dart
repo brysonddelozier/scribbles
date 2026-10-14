@@ -87,13 +87,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: Center(
         child: Column(
           children: [
-            Consumer<ApplicationState>(
-              builder: (context, appState, _) => AuthFunc(
-                loggedIn: appState.loggedIn,
-                signOut: () {
-                  FirebaseAuth.instance.signOut();
-                },
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Consumer<ApplicationState>(
+                  builder: (context, appState, _) => AuthFunc(
+                    loggedIn: appState.loggedIn,
+                    signOut: () {
+                      FirebaseAuth.instance.signOut();
+                    },
+                  ),
+                ),
+              ],
             ),
             TextField(
               onChanged: (s) {
@@ -104,6 +109,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 });
               },
               controller: controller,
+              decoration: const InputDecoration(
+                labelText: 'Username',
+                border: OutlineInputBorder(),
+              ),
             ),
             PaletteWidget(
               0,
