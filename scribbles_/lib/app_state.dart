@@ -73,7 +73,7 @@ class ApplicationState extends ChangeNotifier {
                     likedPosts: List<String>.from(
                       data['likes'] as List<dynamic>? ?? const [],
                     ),
-                    buttonColor: data['ButtonColor'] as int ?? 0xFFEB585A,
+                    buttonColor: data['ButtonColor'] == null ? 0xFFEB585A : data['ButtonColor'] as int,
                   );
                 }
                 Storage.data.profiles = tempData;
