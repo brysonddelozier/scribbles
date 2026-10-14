@@ -43,7 +43,11 @@ class _FeedScreenState extends State<FeedScreen> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Scribbles', style: GoogleFonts.nanumPenScript(fontSize: 50)),
+            //Text('Scribbles', style: GoogleFonts.nanumPenScript(fontSize: 50)),
+            Image.asset(
+              'assets/Scribbles_Logo.png',
+              height: 100,
+            ),
             Text('Feed', style: GoogleFonts.nanumPenScript(fontSize: 50)),
           ],
         ),
